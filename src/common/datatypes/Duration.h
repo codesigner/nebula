@@ -11,6 +11,8 @@
 #include <sstream>
 
 #include "common/time/Constants.h"
+#include "common/datatypes/Type.h"
+
 
 namespace nebula {
 
@@ -125,9 +127,14 @@ struct Duration {
     return months == rhs.months && seconds == rhs.seconds && microseconds == rhs.microseconds;
   }
 
-  std::string toString() const {
-    return folly::sformat(
-        "P{}MT{}.{:0>6}000S", months, seconds + microseconds / 1000000, microseconds % 1000000);
+  nebula::String toString() const {
+    nebula::String s;
+    fmt::format_to(std::back_inserter(s),
+                   "P{}MT{}.{:0>6}000S",
+                   months,
+                   seconds + microseconds / 1000000,
+                   microseconds % 1000000);
+    return s;
   }
 
   folly::dynamic toJson() const {

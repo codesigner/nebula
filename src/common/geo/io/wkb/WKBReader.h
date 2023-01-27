@@ -21,7 +21,7 @@ class WKBReader {
 
   ~WKBReader() {}
 
-  StatusOr<Geography> read(const std::string &wkb);
+  StatusOr<Geography> read(const nebula::String &wkb);
 
  private:
   StatusOr<Point> readPoint();

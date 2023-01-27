@@ -673,7 +673,7 @@ class MetaClient : public BaseMetaClient {
 
   bool registerCfg();
   void updateGflagsValue(const cpp2::ConfigItem& item);
-  void updateNestedGflags(const std::unordered_map<std::string, Value>& nameValues);
+  void updateNestedGflags(const ValueMap& nameValues);
 
   bool loadSchemas(GraphSpaceID spaceId,
                    std::shared_ptr<SpaceInfoCache> spaceInfoCache,

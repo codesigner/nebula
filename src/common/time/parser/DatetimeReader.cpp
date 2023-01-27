@@ -26,7 +26,7 @@ DatetimeReader::DatetimeReader() : parser_(scanner_, error_, &result_) {
   scanner_.setReadBuffer(std::move(readBuffer));
 }
 
-StatusOr<Result> DatetimeReader::read(std::string input) {
+StatusOr<Result> DatetimeReader::read(nebula::String input) {
   // Since DatetimeScanner needs a writable buffer, we have to copy the query string
   buffer_ = std::move(input);
   pos_ = &buffer_[0];

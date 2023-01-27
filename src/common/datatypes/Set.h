@@ -30,7 +30,7 @@ struct Set {
     clear();
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Extract the metadata of each element
   folly::dynamic getMetaData() const;

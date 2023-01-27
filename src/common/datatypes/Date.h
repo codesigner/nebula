@@ -11,6 +11,7 @@
 #include <string>
 
 #include "common/datatypes/Duration.h"
+#include "common/datatypes/Type.h"
 
 namespace nebula {
 
@@ -84,7 +85,7 @@ struct Date {
   void addDuration(const Duration& duration);
   void subDuration(const Duration& duration);
 
-  std::string toString() const;
+  String toString() const;
   folly::dynamic toJson() const {
     return toString();
   }
@@ -155,7 +156,7 @@ struct Time {
   void addDuration(const Duration& duration);
   void subDuration(const Duration& duration);
 
-  std::string toString() const;
+  nebula::String toString() const;
   // 'Z' representing UTC timezone
   folly::dynamic toJson() const {
     return toString() + "Z";
@@ -283,7 +284,7 @@ struct DateTime {
   void addDuration(const Duration& duration);
   void subDuration(const Duration& duration);
 
-  std::string toString() const;
+  nebula::String toString() const;
   // 'Z' representing UTC timezone
   folly::dynamic toJson() const {
     return toString() + "Z";

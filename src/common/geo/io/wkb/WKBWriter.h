@@ -20,7 +20,7 @@ class WKBWriter {
 
   ~WKBWriter() {}
 
-  std::string write(const Geography& geog, ByteOrder byteOrder = ByteOrder::LittleEndian);
+  nebula::String write(const Geography& geog, ByteOrder byteOrder = ByteOrder::LittleEndian);
 
   void writePoint(const Point& point);
 

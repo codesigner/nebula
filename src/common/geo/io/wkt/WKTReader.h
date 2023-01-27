@@ -39,7 +39,7 @@ class WKTReader {
     if (geog_ != nullptr) delete geog_;
   }
 
-  StatusOr<Geography> read(std::string wkt) {
+  StatusOr<Geography> read(nebula::String wkt) {
     // Since WKTScanner needs a writable buffer, we have to copy the query string
     buffer_ = std::move(wkt);
     pos_ = &buffer_[0];

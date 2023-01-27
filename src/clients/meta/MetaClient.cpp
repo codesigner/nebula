@@ -3207,7 +3207,7 @@ void MetaClient::updateGflagsValue(const cpp2::ConfigItem& item) {
   }
 }
 
-void MetaClient::updateNestedGflags(const std::unordered_map<std::string, Value>& nameValues) {
+void MetaClient::updateNestedGflags(const nebula::ValueMap& nameValues) {
   memory::MemoryCheckOffGuard g;
   std::unordered_map<std::string, std::string> optionMap;
   for (const auto& value : nameValues) {

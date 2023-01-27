@@ -7,22 +7,23 @@
 #define COMMON_DATATYPES_LIST_H_
 
 #include <algorithm>
-#include <vector>
 
+#include "common/datatypes/Type.h"
 #include "common/datatypes/Value.h"
+#include "common/memory/Allocator.h"
 
 namespace nebula {
 
 struct List {
-  std::vector<Value> values;
+  ValueVector values;
 
   List() = default;
   List(const List&) = default;
   List(List&&) noexcept = default;
-  explicit List(std::vector<Value>&& vals) {
+  explicit List(ValueVector&& vals) {
     values = std::move(vals);
   }
-  explicit List(const std::vector<Value>& l) : values(l) {}
+  explicit List(const ValueVector& l) : values(l) {}
 
   bool empty() const {
     return values.empty();
@@ -88,7 +89,7 @@ struct List {
     return values.size();
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Extract the metadata of each element
   folly::dynamic getMetaData() const;

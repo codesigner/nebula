@@ -24,19 +24,19 @@ class DatetimeReader {
     if (result_ != nullptr) delete result_;
   }
 
-  StatusOr<Result> readDatetime(std::string input) {
+  StatusOr<Result> readDatetime(nebula::String input) {
     input = kDatetimePrefix + input;
     return read(std::move(input));
   }
 
-  StatusOr<Date> readDate(std::string input) {
+  StatusOr<Date> readDate(nebula::String input) {
     input = kDatePrefix + input;
     auto result = read(std::move(input));
     NG_RETURN_IF_ERROR(result);
     return result.value().dt.date();
   }
 
-  StatusOr<TimeResult> readTime(std::string input) {
+  StatusOr<TimeResult> readTime(nebula::String input) {
     input = kTimePrefix + input;
     auto result = read(std::move(input));
     NG_RETURN_IF_ERROR(result);
@@ -44,7 +44,7 @@ class DatetimeReader {
   }
 
  private:
-  StatusOr<Result> read(std::string input);
+  StatusOr<Result> read(nebula::String input);
 
   std::string buffer_;
   const char *pos_{nullptr};
@@ -54,9 +54,9 @@ class DatetimeReader {
   std::string error_;
   Result *result_{nullptr};
 
-  inline static const std::string kDatetimePrefix = "DATETIME__";
-  inline static const std::string kDatePrefix = "DATE__";
-  inline static const std::string kTimePrefix = "TIME__";
+  inline static const nebula::String kDatetimePrefix = "DATETIME__";
+  inline static const nebula::String kDatePrefix = "DATE__";
+  inline static const nebula::String kTimePrefix = "TIME__";
 };
 
 }  // namespace time

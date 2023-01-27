@@ -18,16 +18,16 @@ class WKTWriter {
 
   ~WKTWriter() {}
 
-  std::string write(const Geography& geog) const;
+  nebula::String write(const Geography& geog) const;
 
-  void writeCoordinate(std::string& wkt, const Coordinate& coord) const;
+  void writeCoordinate(nebula::String& wkt, const Coordinate& coord) const;
 
-  void writeCoordinateList(std::string& wkt, const std::vector<Coordinate>& coordList) const;
+  void writeCoordinateList(nebula::String& wkt, const std::vector<Coordinate>& coordList) const;
 
-  void writeCoordinateListList(std::string& wkt,
+  void writeCoordinateListList(nebula::String& wkt,
                                const std::vector<std::vector<Coordinate>>& coordListList) const;
 
-  void writeDouble(std::string& wkt, double v) const;
+  void writeDouble(nebula::String& wkt, double v) const;
 };
 
 }  // namespace geo

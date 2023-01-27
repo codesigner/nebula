@@ -76,7 +76,7 @@ class ExpressionContext {
   virtual const Value& getColumn(int32_t index) const = 0;
 
   // Get regex
-  const std::regex& getRegex(const std::string& pattern) {
+  const std::regex& getRegex(const nebula::String& pattern) {
     auto iter = regex_.find(pattern);
     if (iter == regex_.end()) {
       iter = regex_.emplace(pattern, std::regex(pattern)).first;
@@ -87,7 +87,7 @@ class ExpressionContext {
   virtual void setVar(const std::string& var, Value val) = 0;
 
  private:
-  std::unordered_map<std::string, std::regex> regex_;
+  std::unordered_map<nebula::String, std::regex> regex_;
 };
 
 }  // namespace nebula

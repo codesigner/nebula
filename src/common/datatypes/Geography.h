@@ -54,7 +54,7 @@ struct Coordinate {
   void normalize();
   Status isValid() const;
 
-  std::string toString() const;
+  nebula::String toString() const;
 
   void clear() {
     x = 0.0;
@@ -168,11 +168,11 @@ struct Geography {
   std::variant<Point, LineString, Polygon> geo_;
 
   // Factory method
-  static StatusOr<Geography> fromWKT(const std::string& wkt,
+  static StatusOr<Geography> fromWKT(const nebula::String& wkt,
                                      bool needNormalize = false,
                                      bool verifyValidity = false);
 
-  static StatusOr<Geography> fromWKB(const std::string& wkb,
+  static StatusOr<Geography> fromWKB(const nebula::String& wkb,
                                      bool needNormalize = false,
                                      bool verifyValidity = false);
 
@@ -199,15 +199,15 @@ struct Geography {
 
   Point centroid() const;
 
-  std::string asWKT() const;
+  nebula::String asWKT() const;
 
-  std::string asWKB() const;
+  nebula::String asWKB() const;
 
-  std::string asWKBHex() const;
+  nebula::String asWKBHex() const;
 
   std::unique_ptr<S2Region> asS2() const;
 
-  std::string toString() const {
+  nebula::String toString() const {
     return asWKT();
   }
 

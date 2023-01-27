@@ -24,9 +24,9 @@ Value GflagsManager::gflagsValueToValue(const std::string& type, const std::stri
   } else if (type == "bool") {
     return Value(folly::to<bool>(flagValue));
   } else if (type == "string") {
-    return Value(folly::to<std::string>(flagValue));
+    return Value(folly::to<nebula::String>(flagValue));
   } else if (type == "map") {
-    auto value = Value(folly::to<std::string>(flagValue));
+    auto value = Value(folly::to<nebula::String>(flagValue));
     VLOG(1) << "Nested value: " << value;
     // transform to map value
     conf::Configuration conf;

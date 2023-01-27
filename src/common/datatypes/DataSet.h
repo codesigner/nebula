@@ -15,17 +15,19 @@
 
 #include "common/datatypes/List.h"
 #include "common/datatypes/Value.h"
+#include "common/memory/Allocator.h"
 
 namespace nebula {
 
 using Row = List;
 
 struct DataSet {
-  std::vector<std::string> colNames;
-  std::vector<Row> rows;
+  StringVector colNames;
+  ListVector rows;
 
   DataSet() = default;
-  explicit DataSet(std::vector<std::string> columns) : colNames(std::move(columns)) {}
+  explicit DataSet(StringVector columns)
+      : colNames(std::move(columns)) {}
   DataSet(const DataSet& ds) {
     colNames = ds.colNames;
     rows = ds.rows;
@@ -49,16 +51,16 @@ struct DataSet {
     return *this;
   }
 
-  const std::vector<std::string>& keys() const {
+  const StringVector& keys() const {
     return colNames;
   }
 
-  const std::vector<Value>& rowValues(std::size_t index) const {
+  const ValueVector& rowValues(std::size_t index) const {
     return rows[index].values;
   }
 
-  std::vector<Value> colValues(const std::string& colName) const {
-    std::vector<Value> col;
+  ValueVector colValues(const String& colName) const {
+    ValueVector col;
     const auto find = std::find(colNames.begin(), colNames.end(), colName);
     if (find == colNames.end()) {
       return col;
@@ -71,8 +73,8 @@ struct DataSet {
     return col;
   }
 
-  using iterator = std::vector<Row>::iterator;
-  using const_iterator = std::vector<Row>::const_iterator;
+  using iterator = ListVector::iterator;
+  using const_iterator = ListVector::const_iterator;
 
   iterator begin() {
     return rows.begin();
@@ -112,7 +114,7 @@ struct DataSet {
     rows.reserve(rowSize() + o.rowSize());
     rows.insert(
         rows.end(), std::make_move_iterator(o.rows.begin()), std::make_move_iterator(o.rows.end()));
-    std::vector<Row>().swap(o.rows);
+    ListVector().swap(o.rows);
     return true;
   }
 
@@ -156,7 +158,7 @@ struct DataSet {
     return colNames.size();
   }
 
-  std::string toString() const {
+  nebula::String toString() const {
     std::stringstream os;
     // header
     for (const auto& h : colNames) {
@@ -172,7 +174,7 @@ struct DataSet {
       os << std::endl;
     }
     os << std::endl;
-    return os.str();
+    return nebula::String(os.str());
   }
 
   // format:

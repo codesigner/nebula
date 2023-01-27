@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <string>
 
+#include "common/memory/Allocator.h"
+
 namespace nebula {
 // Raft related types
 using ClusterID = int64_t;
@@ -25,7 +27,7 @@ using Port = int32_t;
 //
 // If the length of a given id is shorter than the specified length, '\0' will
 // be appended to the end
-using VertexID = std::string;
+using VertexID = std::basic_string<char, std::char_traits<char>, Allocator<char>>;
 using TagID = int32_t;
 using TagVersion = int64_t;
 using EdgeType = int32_t;

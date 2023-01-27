@@ -104,9 +104,9 @@ class IndexKeyUtils final {
     return raw;
   }
 
-  static std::string encodeValue(const Value& v, int16_t len) {
+  static nebula::String encodeValue(const Value& v, int16_t len) {
     if (v.type() == Value::Type::STRING) {
-      std::string fs = v.getStr();
+      nebula::String fs = v.getStr();
       if (static_cast<size_t>(len) > v.getStr().size()) {
         fs.append(len - v.getStr().size(), '\0');
       } else {
@@ -118,7 +118,7 @@ class IndexKeyUtils final {
     }
   }
 
-  static std::string encodeValue(const Value& v) {
+  static nebula::String encodeValue(const Value& v) {
     switch (v.type()) {
       case Value::Type::INT:
         return encodeInt64(v.getInt());
@@ -126,7 +126,7 @@ class IndexKeyUtils final {
         return encodeDouble(v.getFloat());
       case Value::Type::BOOL: {
         auto val = v.getBool();
-        std::string raw;
+        nebula::String raw;
         raw.reserve(sizeof(bool));
         raw.append(reinterpret_cast<const char*>(&val), sizeof(bool));
         return raw;
@@ -162,10 +162,10 @@ class IndexKeyUtils final {
    *    -9223372036854775808    -> "\000\000\000\000\000\000\000\000"
    */
 
-  static std::string encodeInt64(int64_t v) {
+  static nebula::String encodeInt64(int64_t v) {
     v ^= folly::to<int64_t>(1) << 63;
     auto val = folly::Endian::big(v);
-    std::string raw;
+    nebula::String raw;
     raw.reserve(sizeof(int64_t));
     raw.append(reinterpret_cast<const char*>(&val), sizeof(int64_t));
     return raw;
@@ -192,7 +192,7 @@ class IndexKeyUtils final {
     return val;
   }
 
-  static std::string encodeRank(EdgeRanking rank) {
+  static nebula::String encodeRank(EdgeRanking rank) {
     return IndexKeyUtils::encodeInt64(rank);
   }
 
@@ -208,14 +208,14 @@ class IndexKeyUtils final {
    *   then need to subtract from maximum.
    */
 
-  static std::string encodeDouble(double v) {
+  static nebula::String encodeDouble(double v) {
     if (std::isnan(v)) {
-      return std::string(sizeof(double), '\xFF');
+      return nebula::String(sizeof(double), '\xFF');
     } else if (v >= 0) {
       auto val = folly::Endian::big(v);
       auto* c = reinterpret_cast<char*>(&val);
       c[0] |= 0x80;
-      std::string raw;
+      nebula::String raw;
       raw.reserve(sizeof(double));
       raw.append(c, sizeof(double));
       return raw;
@@ -224,7 +224,7 @@ class IndexKeyUtils final {
       *x = ~(*x);
       auto val = folly::Endian::big(v);
       auto* c = reinterpret_cast<char*>(&val);
-      std::string raw;
+      nebula::String raw;
       raw.reserve(sizeof(double));
       raw.append(c, sizeof(double));
       return raw;
@@ -244,12 +244,12 @@ class IndexKeyUtils final {
     return ret;
   }
 
-  static std::string encodeTime(const nebula::Time& t) {
+  static nebula::String encodeTime(const nebula::Time& t) {
     auto hour = folly::Endian::big8(t.hour);
     auto minute = folly::Endian::big8(t.minute);
     auto sec = folly::Endian::big8(t.sec);
     auto microsec = folly::Endian::big32(t.microsec);
-    std::string buf;
+    nebula::String buf;
     buf.reserve(sizeof(int32_t) + sizeof(int8_t) * 3);
     buf.append(reinterpret_cast<const char*>(&hour), sizeof(int8_t))
         .append(reinterpret_cast<const char*>(&minute), sizeof(int8_t))
@@ -272,11 +272,11 @@ class IndexKeyUtils final {
     return t;
   }
 
-  static std::string encodeDate(const nebula::Date& d) {
+  static nebula::String encodeDate(const nebula::Date& d) {
     auto year = folly::Endian::big16(d.year);
     auto month = folly::Endian::big8(d.month);
     auto day = folly::Endian::big8(d.day);
-    std::string buf;
+    nebula::String buf;
     buf.reserve(sizeof(int8_t) * 2 + sizeof(int16_t));
     buf.append(reinterpret_cast<const char*>(&year), sizeof(int16_t))
         .append(reinterpret_cast<const char*>(&month), sizeof(int8_t))
@@ -291,7 +291,7 @@ class IndexKeyUtils final {
     return Date(folly::Endian::big16(year), folly::Endian::big8(month), folly::Endian::big8(day));
   }
 
-  static std::string encodeDateTime(const nebula::DateTime& dt) {
+  static nebula::String encodeDateTime(const nebula::DateTime& dt) {
     auto year = folly::Endian::big16(static_cast<uint16_t>(dt.year));
     auto month = folly::Endian::big8(static_cast<uint8_t>(dt.month));
     auto day = folly::Endian::big8(static_cast<uint8_t>(dt.day));
@@ -299,7 +299,7 @@ class IndexKeyUtils final {
     auto minute = folly::Endian::big8(static_cast<uint8_t>(dt.minute));
     auto sec = folly::Endian::big8(static_cast<uint8_t>(dt.sec));
     auto microsec = folly::Endian::big32(static_cast<uint32_t>(dt.microsec));
-    std::string buf;
+    nebula::String buf;
     buf.reserve(sizeof(int32_t) + sizeof(int16_t) + sizeof(int8_t) * 5);
     buf.append(reinterpret_cast<const char*>(&year), sizeof(int16_t))
         .append(reinterpret_cast<const char*>(&month), sizeof(int8_t))
@@ -370,7 +370,7 @@ class IndexKeyUtils final {
         break;
       }
       case Value::Type::STRING: {
-        v.setStr(raw.subpiece(0, raw.find_first_of('\0')).toString());
+        v.setStr(raw.subpiece(0, raw.find_first_of('\0')).to<nebula::String>());
         break;
       }
       case Value::Type::TIME: {

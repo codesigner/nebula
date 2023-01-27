@@ -8,7 +8,7 @@
 namespace nebula {
 namespace geo {
 
-std::string WKBWriter::write(const Geography& geog, ByteOrder byteOrder) {
+nebula::String WKBWriter::write(const Geography& geog, ByteOrder byteOrder) {
   os_.setByteOrder(byteOrder);
   os_.writeUint8(folly::to<uint8_t>(byteOrder));
 
@@ -19,17 +19,17 @@ std::string WKBWriter::write(const Geography& geog, ByteOrder byteOrder) {
     case GeoShape::POINT: {
       const Point& point = geog.point();
       writePoint(point);
-      return os_.str();
+      return nebula::String(os_.str());
     }
     case GeoShape::LINESTRING: {
       const LineString& line = geog.lineString();
       writeLineString(line);
-      return os_.str();
+      return nebula::String(os_.str());
     }
     case GeoShape::POLYGON: {
       const Polygon& polygon = geog.polygon();
       writePolygon(polygon);
-      return os_.str();
+      return nebula::String(os_.str());
     }
     default:
       DLOG(FATAL)

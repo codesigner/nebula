@@ -12,17 +12,17 @@
 
 namespace nebula {
 
-std::string Map::toString() const {
+nebula::String Map::toString() const {
   std::vector<std::string> value(kvs.size());
-  std::transform(kvs.begin(), kvs.end(), value.begin(), [](const auto& iter) -> std::string {
+  std::transform(kvs.begin(), kvs.end(), value.begin(), [](const auto& iter) -> nebula::String {
     std::stringstream out;
     out << iter.first << ":" << iter.second;
-    return out.str();
+    return nebula::String(out.str());
   });
 
   std::stringstream os;
   os << "{" << folly::join(",", value) << "}";
-  return os.str();
+  return nebula::String(os.str());
 }
 
 folly::dynamic Map::toJson() const {
@@ -53,7 +53,7 @@ Map::Map(const folly::dynamic& obj) {
   DCHECK(obj.isObject());
   for (auto& kv : obj.items()) {
     if (kv.second.isString()) {
-      kvs.emplace(kv.first.asString(), Value(kv.second.asString()));
+      kvs.emplace(kv.first.asString(), Value(nebula::String(kv.second.asString())));
     } else if (kv.second.isInt()) {
       kvs.emplace(kv.first.asString(), Value(kv.second.asInt()));
     } else if (kv.second.isDouble()) {
@@ -63,10 +63,10 @@ Map::Map(const folly::dynamic& obj) {
     } else if (kv.second.isNull()) {
       kvs.emplace(kv.first.asString(), Value());
     } else if (kv.second.isObject()) {
-      std::unordered_map<std::string, Value> values;
+      ValueMap values;
       for (auto& nkv : kv.second.items()) {
         if (nkv.second.isString()) {
-          values.emplace(nkv.first.asString(), Value(nkv.second.asString()));
+          values.emplace(nkv.first.asString(), Value(nebula::String(nkv.second.asString())));
         } else if (nkv.second.isInt()) {
           values.emplace(nkv.first.asString(), Value(nkv.second.asInt()));
         } else if (nkv.second.isDouble()) {
@@ -94,7 +94,7 @@ namespace std {
 std::size_t hash<nebula::Map>::operator()(const nebula::Map& m) const {
   size_t seed = 0;
   for (auto& v : m.kvs) {
-    seed ^= hash<std::string>()(v.first) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    seed ^= hash<nebula::String>()(v.first) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
     seed ^= hash<nebula::Value>()(v.second) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
   }
   return seed;

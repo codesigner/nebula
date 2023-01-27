@@ -68,8 +68,8 @@ Status Coordinate::isValid() const {
   return Status::OK();
 }
 
-std::string Coordinate::toString() const {
-  return "(" + std::to_string(x) + " " + std::to_string(y) + ")";
+nebula::String Coordinate::toString() const {
+  return "(" + folly::to<nebula::String>(x) + " " + folly::to<nebula::String>(y) + ")";
 }
 
 void Point::normalize() {}
@@ -147,7 +147,7 @@ Status Polygon::isValid() const {
   return Status::OK();
 }
 
-StatusOr<Geography> Geography::fromWKT(const std::string& wkt,
+StatusOr<Geography> Geography::fromWKT(const nebula::String& wkt,
                                        bool needNormalize,
                                        bool verifyValidity) {
   auto geogRet = geo::WKTReader().read(wkt);
@@ -171,7 +171,7 @@ StatusOr<Geography> Geography::fromWKT(const std::string& wkt,
   return geog;
 }
 
-StatusOr<Geography> Geography::fromWKB(const std::string& wkb,
+StatusOr<Geography> Geography::fromWKB(const nebula::String& wkb,
                                        bool needNormalize,
                                        bool verifyValidity) {
   auto geogRet = geo::WKBReader().read(wkb);
@@ -313,16 +313,16 @@ Point Geography::centroid() const {
   }
 }
 
-std::string Geography::asWKT() const {
+nebula::String Geography::asWKT() const {
   return geo::WKTWriter().write(*this);
 }
 
-std::string Geography::asWKB() const {
+nebula::String Geography::asWKB() const {
   return geo::WKBWriter().write(*this);
 }
 
-std::string Geography::asWKBHex() const {
-  return folly::hexlify(geo::WKBWriter().write(*this));
+nebula::String Geography::asWKBHex() const {
+  return folly::hexlify<nebula::String>(geo::WKBWriter().write(*this));
 }
 
 std::unique_ptr<S2Region> Geography::asS2() const {
@@ -388,8 +388,8 @@ namespace std {
 
 // Inject a customized hash function
 std::size_t hash<nebula::Geography>::operator()(const nebula::Geography& v) const {
-  std::string wkb = v.asWKB();
-  return hash<std::string>{}(wkb);
+  nebula::String wkb = v.asWKB();
+  return hash<nebula::String>{}(wkb);
 }
 
 }  // namespace std

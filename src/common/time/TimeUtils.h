@@ -79,7 +79,7 @@ class TimeUtils {
     return Status::OK();
   }
 
-  static StatusOr<Result> parseDateTime(const std::string &str);
+  static StatusOr<Result> parseDateTime(const nebula::String &str);
 
   static StatusOr<DateTime> dateTimeFromMap(const Map &m);
 
@@ -130,7 +130,7 @@ class TimeUtils {
 
   static StatusOr<Date> dateFromMap(const Map &m);
 
-  static StatusOr<Date> parseDate(const std::string &str);
+  static StatusOr<Date> parseDate(const nebula::String &str);
 
   static StatusOr<Date> localDate() {
     Date d;
@@ -166,7 +166,7 @@ class TimeUtils {
 
   static StatusOr<Time> timeFromMap(const Map &m);
 
-  static StatusOr<TimeResult> parseTime(const std::string &str);
+  static StatusOr<TimeResult> parseTime(const nebula::String &str);
 
   // utc + offset = local
   static Time timeToUTC(const Time &time) {

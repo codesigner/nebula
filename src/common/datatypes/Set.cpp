@@ -11,14 +11,14 @@
 
 namespace nebula {
 
-std::string Set::toString() const {
+nebula::String Set::toString() const {
   std::vector<std::string> value(values.size());
-  std::transform(values.begin(), values.end(), value.begin(), [](const auto& v) -> std::string {
+  std::transform(values.begin(), values.end(), value.begin(), [](const auto& v) -> nebula::String {
     return v.toString();
   });
   std::stringstream os;
   os << "{" << folly::join(",", value) << "}";
-  return os.str();
+  return nebula::String(os.str());
 }
 
 folly::dynamic Set::toJson() const {

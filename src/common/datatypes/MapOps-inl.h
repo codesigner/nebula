@@ -43,10 +43,8 @@ uint32_t Cpp2Ops<nebula::Map>::write(Protocol* proto, nebula::Map const* obj) {
   xfer += proto->writeStructBegin("NMap");
 
   xfer += proto->writeFieldBegin("kvs", apache::thrift::protocol::T_MAP, 1);
-  xfer +=
-      detail::pm::protocol_methods<type_class::map<type_class::binary, type_class::structure>,
-                                   std::unordered_map<std::string, nebula::Value>>::write(*proto,
-                                                                                          obj->kvs);
+  xfer += detail::pm::protocol_methods<type_class::map<type_class::binary, type_class::structure>,
+                                       nebula::ValueMap>::write(*proto, obj->kvs);
   xfer += proto->writeFieldEnd();
 
   xfer += proto->writeFieldStop();
@@ -67,10 +65,9 @@ void Cpp2Ops<nebula::Map>::read(Protocol* proto, nebula::Map* obj) {
   }
 
 _readField_kvs : {
-  obj->kvs = std::unordered_map<std::string, nebula::Value>();
+  obj->kvs = nebula::ValueMap();
   detail::pm::protocol_methods<type_class::map<type_class::binary, type_class::structure>,
-                               std::unordered_map<std::string, nebula::Value>>::read(*proto,
-                                                                                     obj->kvs);
+                               nebula::ValueMap>::read(*proto, obj->kvs);
 }
 
   if (UNLIKELY(!readState.advanceToNextField(proto, 1, 0, protocol::T_STOP))) {
@@ -116,9 +113,8 @@ uint32_t Cpp2Ops<nebula::Map>::serializedSize(Protocol const* proto, nebula::Map
   xfer += proto->serializedStructSize("NMap");
 
   xfer += proto->serializedFieldSize("kvs", apache::thrift::protocol::T_MAP, 1);
-  xfer += detail::pm::protocol_methods<
-      type_class::map<type_class::binary, type_class::structure>,
-      std::unordered_map<std::string, nebula::Value>>::serializedSize<false>(*proto, obj->kvs);
+  xfer += detail::pm::protocol_methods<type_class::map<type_class::binary, type_class::structure>,
+                                       nebula::ValueMap>::serializedSize<false>(*proto, obj->kvs);
   xfer += proto->serializedSizeStop();
   return xfer;
 }
@@ -129,9 +125,8 @@ uint32_t Cpp2Ops<nebula::Map>::serializedSizeZC(Protocol const* proto, nebula::M
   xfer += proto->serializedStructSize("NMap");
 
   xfer += proto->serializedFieldSize("kvs", apache::thrift::protocol::T_MAP, 1);
-  xfer += detail::pm::protocol_methods<
-      type_class::map<type_class::binary, type_class::structure>,
-      std::unordered_map<std::string, nebula::Value>>::serializedSize<false>(*proto, obj->kvs);
+  xfer += detail::pm::protocol_methods<type_class::map<type_class::binary, type_class::structure>,
+                                       nebula::ValueMap>::serializedSize<false>(*proto, obj->kvs);
   xfer += proto->serializedSizeStop();
   return xfer;
 }

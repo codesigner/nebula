@@ -804,7 +804,7 @@ WriteResult RowWriterV2::write(ssize_t index, const Geography& v) {
       folly::to<uint32_t>(geoShape) != folly::to<uint32_t>(v.shape())) {
     return WriteResult::TYPE_MISMATCH;
   }
-  std::string wkb = v.asWKB();
+  nebula::String wkb = v.asWKB();
   return write(index, folly::StringPiece(wkb));
 }
 

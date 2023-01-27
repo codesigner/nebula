@@ -8,8 +8,8 @@
 namespace nebula {
 namespace geo {
 
-std::string WKTWriter::write(const Geography& geog) const {
-  std::string wkt = "";
+nebula::String WKTWriter::write(const Geography& geog) const {
+  nebula::String wkt = "";
 
   auto shape = geog.shape();
   switch (shape) {
@@ -50,13 +50,13 @@ std::string WKTWriter::write(const Geography& geog) const {
   }
 }
 
-void WKTWriter::writeCoordinate(std::string& wkt, const Coordinate& coord) const {
+void WKTWriter::writeCoordinate(nebula::String& wkt, const Coordinate& coord) const {
   writeDouble(wkt, coord.x);
   wkt.append(" ");
   writeDouble(wkt, coord.y);
 }
 
-void WKTWriter::writeCoordinateList(std::string& wkt,
+void WKTWriter::writeCoordinateList(nebula::String& wkt,
                                     const std::vector<Coordinate>& coordList) const {
   for (size_t i = 0; i < coordList.size(); ++i) {
     writeCoordinate(wkt, coordList[i]);
@@ -67,7 +67,7 @@ void WKTWriter::writeCoordinateList(std::string& wkt,
 }
 
 void WKTWriter::WKTWriter::writeCoordinateListList(
-    std::string& wkt, const std::vector<std::vector<Coordinate>>& coordListList) const {
+    nebula::String& wkt, const std::vector<std::vector<Coordinate>>& coordListList) const {
   for (size_t i = 0; i < coordListList.size(); ++i) {
     const auto& coordList = coordListList[i];
     uint32_t numCoord = coordList.size();
@@ -81,7 +81,7 @@ void WKTWriter::WKTWriter::writeCoordinateListList(
   wkt.pop_back();
 }
 
-void WKTWriter::writeDouble(std::string& wkt, double v) const {
+void WKTWriter::writeDouble(nebula::String& wkt, double v) const {
   wkt.append(folly::to<std::string>(v));
 }
 

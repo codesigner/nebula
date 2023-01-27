@@ -17,9 +17,9 @@ struct Edge {
   Value src;
   Value dst;
   EdgeType type;
-  std::string name;
+  String name;
   EdgeRanking ranking;
-  std::unordered_map<std::string, Value> props;
+  ValueMap props;
   std::atomic<size_t> refcnt{1};
 
   Edge() {}
@@ -35,9 +35,9 @@ struct Edge {
   Edge(Value s,
        Value d,
        EdgeType t,
-       std::string n,
+       String n,
        EdgeRanking r,
-       std::unordered_map<std::string, Value>&& p)
+       ValueMap&& p)
       : src(std::move(s)),
         dst(std::move(d)),
         type(std::move(t)),
@@ -58,7 +58,7 @@ struct Edge {
     clear();
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Used in Json form query result
   folly::dynamic getMetaData() const;
@@ -81,12 +81,12 @@ struct Edge {
 
   bool contains(const Value& key) const;
 
-  const Value& value(const std::string& key) const;
+  const Value& value(const nebula::String& key) const;
 
   bool keyEqual(const Edge& rhs) const;
 
   // Return this edge's id encoded in string
-  std::string id() const;
+  nebula::String id() const;
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Edge& v) {

@@ -6,7 +6,8 @@
 #ifndef COMMON_DATATYPES_PATH_H_
 #define COMMON_DATATYPES_PATH_H_
 
-#include "common/datatypes/Value.h"
+#include "Type.h"
+#include "common/datatypes/Type.h"
 #include "common/datatypes/Vertex.h"
 #include "common/thrift/ThriftTypes.h"
 
@@ -15,9 +16,9 @@ namespace nebula {
 struct Step {
   Vertex dst;
   EdgeType type;
-  std::string name;
+  String name;
   EdgeRanking ranking;
-  std::unordered_map<std::string, Value> props;
+  ValueMap props;
 
   Step() = default;
   Step(const Step& s)
@@ -28,7 +29,7 @@ struct Step {
         name(std::move(s.name)),
         ranking(std::move(s.ranking)),
         props(std::move(s.props)) {}
-  Step(Vertex d, EdgeType t, std::string n, EdgeRanking r, std::unordered_map<std::string, Value> p)
+  Step(Vertex d, EdgeType t, String n, EdgeRanking r, ValueMap p)
       : dst(std::move(d)), type(t), name(std::move(n)), ranking(r), props(std::move(p)) {}
 
   void clear() {
@@ -43,7 +44,7 @@ struct Step {
     clear();
   }
 
-  std::string toString() const {
+  nebula::String toString() const {
     std::stringstream os;
     os << "-[" << name << "(" << type << ")]->"
        << "(" << dst << ")"
@@ -53,7 +54,7 @@ struct Step {
     }
     auto path = os.str();
     path.pop_back();
-    return path;
+    return nebula::String(path);
   }
 
   Step& operator=(Step&& rhs) noexcept {
@@ -102,12 +103,12 @@ struct Step {
 
 struct Path {
   Vertex src;
-  std::vector<Step> steps;
+  StepVector steps;
 
   Path() = default;
   Path(const Path& p) = default;
   Path(Path&& p) noexcept : src(std::move(p.src)), steps(std::move(p.steps)) {}
-  Path(Vertex v, std::vector<Step> s) : src(std::move(v)), steps(std::move(s)) {}
+  Path(Vertex v, StepVector s) : src(std::move(v)), steps(std::move(s)) {}
 
   void clear() {
     src.clear();
@@ -118,7 +119,7 @@ struct Path {
     clear();
   }
 
-  std::string toString() const {
+  nebula::String toString() const {
     std::stringstream os;
     os << "(" << src << ")";
     os << " ";
@@ -126,7 +127,7 @@ struct Path {
       os << s.toString();
       os << " ";
     }
-    return os.str();
+    return nebula::String(os.str());
   }
 
   folly::dynamic toJson() const {

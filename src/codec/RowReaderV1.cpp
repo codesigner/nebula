@@ -378,7 +378,7 @@ Value RowReaderV1::getString(int64_t index) const {
       if (numBytes < 0) {
         v.setNull(NullType::BAD_DATA);
       } else {
-        v.setStr(s.toString());
+        v.setStr(folly::to<nebula::String>(s));
         offset += numBytes;
       }
       break;
@@ -433,7 +433,7 @@ Value RowReaderV1::getVid(int64_t index) const {
     Value v(getInt64(index));
     CHECK_EQ(v.type(), Value::Type::INT);
     int64_t vid = v.getInt();
-    v.setStr(std::string(reinterpret_cast<char*>(&vid), sizeof(int64_t)));
+    v.setStr(nebula::String(reinterpret_cast<char*>(&vid), sizeof(int64_t)));
     return v;
   } else {
     return NullType::BAD_TYPE;

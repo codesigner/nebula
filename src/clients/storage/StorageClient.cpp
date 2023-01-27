@@ -652,7 +652,7 @@ StorageRpcRespFuture<cpp2::ScanResponse> StorageClient::scanVertex(
 folly::SemiFuture<StorageRpcResponse<cpp2::KVGetResponse>> StorageClient::get(
     GraphSpaceID space, std::vector<std::string>&& keys, bool returnPartly, folly::EventBase* evb) {
   auto status = clusterIdsToHosts(
-      space, std::move(keys), [](const std::string& v) -> const std::string& { return v; });
+      space, std::move(keys), [](const nebula::String& v) -> const nebula::String& { return v; });
 
   if (!status.ok()) {
     return folly::makeFuture<StorageRpcResponse<cpp2::KVGetResponse>>(
@@ -678,7 +678,7 @@ folly::SemiFuture<StorageRpcResponse<cpp2::KVGetResponse>> StorageClient::get(
 folly::SemiFuture<StorageRpcResponse<cpp2::ExecResponse>> StorageClient::put(
     GraphSpaceID space, std::vector<KeyValue> kvs, folly::EventBase* evb) {
   auto status = clusterIdsToHosts(
-      space, std::move(kvs), [](const KeyValue& v) -> const std::string& { return v.key; });
+      space, std::move(kvs), [](const KeyValue& v) -> const nebula::String& { return v.key; });
 
   if (!status.ok()) {
     return folly::makeFuture<StorageRpcResponse<cpp2::ExecResponse>>(
@@ -743,9 +743,9 @@ StatusOr<std::function<const VertexID&(const Row&)>> StorageClient::getIdFromRow
         DCHECK_EQ(Value::Type::INT, r.values[3].type());
         auto& mutableR = const_cast<Row&>(r);
         mutableR.values[0] =
-            Value(std::string(reinterpret_cast<const char*>(&r.values[0].getInt()), 8));
+            Value(nebula::String(reinterpret_cast<const char*>(&r.values[0].getInt()), 8));
         mutableR.values[3] =
-            Value(std::string(reinterpret_cast<const char*>(&r.values[3].getInt()), 8));
+            Value(nebula::String(reinterpret_cast<const char*>(&r.values[3].getInt()), 8));
         return mutableR.values[0].getStr();
       };
     } else {
@@ -754,7 +754,7 @@ StatusOr<std::function<const VertexID&(const Row&)>> StorageClient::getIdFromRow
         DCHECK_EQ(Value::Type::INT, r.values[0].type());
         auto& mutableR = const_cast<Row&>(r);
         mutableR.values[0] =
-            Value(std::string(reinterpret_cast<const char*>(&r.values[0].getInt()), 8));
+            Value(nebula::String(reinterpret_cast<const char*>(&r.values[0].getInt()), 8));
         return mutableR.values[0].getStr();
       };
     }
@@ -785,7 +785,7 @@ StatusOr<std::function<const VertexID&(const cpp2::NewVertex&)>> StorageClient::
       DCHECK_EQ(Value::Type::INT, v.get_id().type());
       auto& mutableV = const_cast<cpp2::NewVertex&>(v);
       mutableV.id_ref() =
-          Value(std::string(reinterpret_cast<const char*>(&v.get_id().getInt()), 8));
+          Value(nebula::String(reinterpret_cast<const char*>(&v.get_id().getInt()), 8));
       return mutableV.get_id().getStr();
     };
   } else if (vidType == PropertyType::FIXED_STRING) {
@@ -816,11 +816,11 @@ StatusOr<std::function<const VertexID&(const cpp2::NewEdge&)>> StorageClient::ge
       (*mutableE.key_ref())
           .src_ref()
           .emplace(Value(
-              std::string(reinterpret_cast<const char*>(&e.get_key().get_src().getInt()), 8)));
+              nebula::String(reinterpret_cast<const char*>(&e.get_key().get_src().getInt()), 8)));
       (*mutableE.key_ref())
           .dst_ref()
           .emplace(Value(
-              std::string(reinterpret_cast<const char*>(&e.get_key().get_dst().getInt()), 8)));
+              nebula::String(reinterpret_cast<const char*>(&e.get_key().get_dst().getInt()), 8)));
       return mutableE.get_key().get_src().getStr();
     };
   } else if (vidType == PropertyType::FIXED_STRING) {
@@ -850,9 +850,9 @@ StatusOr<std::function<const VertexID&(const cpp2::EdgeKey&)>> StorageClient::ge
       DCHECK_EQ(Value::Type::INT, eKey.get_dst().type());
       auto& mutableEK = const_cast<cpp2::EdgeKey&>(eKey);
       mutableEK.src_ref() =
-          Value(std::string(reinterpret_cast<const char*>(&eKey.get_src().getInt()), 8));
+          Value(nebula::String(reinterpret_cast<const char*>(&eKey.get_src().getInt()), 8));
       mutableEK.dst_ref() =
-          Value(std::string(reinterpret_cast<const char*>(&eKey.get_dst().getInt()), 8));
+          Value(nebula::String(reinterpret_cast<const char*>(&eKey.get_dst().getInt()), 8));
       return mutableEK.get_src().getStr();
     };
   } else if (vidType == PropertyType::FIXED_STRING) {
@@ -880,7 +880,7 @@ StatusOr<std::function<const VertexID&(const Value&)>> StorageClient::getIdFromV
     cb = [](const Value& v) -> const VertexID& {
       DCHECK_EQ(Value::Type::INT, v.type());
       auto& mutableV = const_cast<Value&>(v);
-      mutableV = Value(std::string(reinterpret_cast<const char*>(&v.getInt()), 8));
+      mutableV = Value(nebula::String(reinterpret_cast<const char*>(&v.getInt()), 8));
       return mutableV.getStr();
     };
   } else if (vidType == PropertyType::FIXED_STRING) {

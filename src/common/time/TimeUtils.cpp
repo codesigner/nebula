@@ -208,21 +208,21 @@ StatusOr<Value> TimeUtils::toTimestamp(const Value &val) {
   return d;
 }
 
-/*static*/ StatusOr<Result> TimeUtils::parseDateTime(const std::string &str) {
+/*static*/ StatusOr<Result> TimeUtils::parseDateTime(const nebula::String &str) {
   auto p = DatetimeReader();
   auto result = p.readDatetime(str);
   NG_RETURN_IF_ERROR(result);
   return result.value();
 }
 
-/*static*/ StatusOr<Date> TimeUtils::parseDate(const std::string &str) {
+/*static*/ StatusOr<Date> TimeUtils::parseDate(const nebula::String &str) {
   auto p = DatetimeReader();
   auto result = p.readDate(str);
   NG_RETURN_IF_ERROR(result);
   return result.value();
 }
 
-/*static*/ StatusOr<TimeResult> TimeUtils::parseTime(const std::string &str) {
+/*static*/ StatusOr<TimeResult> TimeUtils::parseTime(const nebula::String &str) {
   auto p = DatetimeReader();
   return p.readTime(str);
 }

@@ -14,12 +14,12 @@
 namespace nebula {
 
 struct Map {
-  std::unordered_map<std::string, Value> kvs;
+  ValueMap kvs;
 
   Map() = default;
   Map(const Map&) = default;
   Map(Map&&) noexcept = default;
-  explicit Map(std::unordered_map<std::string, Value> values) {
+  explicit Map(ValueMap values) {
     kvs = std::move(values);
   }
 
@@ -50,7 +50,7 @@ struct Map {
 
   // the configs of rocksdb will use the interface, so the value need modify to
   // string
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Extract the metadata of the value of each kv pair
   folly::dynamic getMetaData() const;
@@ -66,7 +66,7 @@ struct Map {
     return kvs.count(value.getStr()) != 0;
   }
 
-  const Value& at(const std::string& key) const {
+  const Value& at(const nebula::String& key) const {
     auto iter = kvs.find(key);
     if (iter == kvs.end()) {
       return Value::kNullUnknownProp;

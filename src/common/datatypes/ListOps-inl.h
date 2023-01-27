@@ -44,7 +44,7 @@ uint32_t Cpp2Ops<nebula::List>::write(Protocol* proto, nebula::List const* obj) 
 
   xfer += proto->writeFieldBegin("values", apache::thrift::protocol::T_LIST, 1);
   xfer += detail::pm::protocol_methods<type_class::list<type_class::structure>,
-                                       std::vector<nebula::Value>>::write(*proto, obj->values);
+                                       nebula::ValueVector>::write(*proto, obj->values);
   xfer += proto->writeFieldEnd();
 
   xfer += proto->writeFieldStop();
@@ -65,9 +65,9 @@ void Cpp2Ops<nebula::List>::read(Protocol* proto, nebula::List* obj) {
   }
 
 _readField_values : {
-  obj->values = std::vector<nebula::Value>();
-  detail::pm::protocol_methods<type_class::list<type_class::structure>,
-                               std::vector<nebula::Value>>::read(*proto, obj->values);
+  obj->values = nebula::ValueVector();
+  detail::pm::protocol_methods<type_class::list<type_class::structure>, nebula::ValueVector>::read(
+      *proto, obj->values);
 }
 
   if (UNLIKELY(!readState.advanceToNextField(proto, 1, 0, protocol::T_STOP))) {
@@ -115,8 +115,7 @@ uint32_t Cpp2Ops<nebula::List>::serializedSize(Protocol const* proto, nebula::Li
   xfer += proto->serializedFieldSize("values", apache::thrift::protocol::T_LIST, 1);
   xfer +=
       detail::pm::protocol_methods<type_class::list<type_class::structure>,
-                                   std::vector<nebula::Value>>::serializedSize<false>(*proto,
-                                                                                      obj->values);
+                                   nebula::ValueVector>::serializedSize<false>(*proto, obj->values);
   xfer += proto->serializedSizeStop();
   return xfer;
 }
@@ -129,8 +128,7 @@ uint32_t Cpp2Ops<nebula::List>::serializedSizeZC(Protocol const* proto, nebula::
   xfer += proto->serializedFieldSize("values", apache::thrift::protocol::T_LIST, 1);
   xfer +=
       detail::pm::protocol_methods<type_class::list<type_class::structure>,
-                                   std::vector<nebula::Value>>::serializedSize<false>(*proto,
-                                                                                      obj->values);
+                                   nebula::ValueVector>::serializedSize<false>(*proto, obj->values);
   xfer += proto->serializedSizeStop();
   return xfer;
 }

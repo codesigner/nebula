@@ -45,7 +45,7 @@ class MapItemList final {
     return pool->makeAndAdd<MapItemList>(sz);
   }
 
-  MapItemList &add(const std::string &key, Expression *value) {
+  MapItemList &add(const nebula::String &key, Expression *value) {
     items_.emplace_back(key, value);
     return *this;
   }
@@ -62,7 +62,7 @@ class MapItemList final {
   }
 
  private:
-  using Pair = std::pair<std::string, Expression *>;
+  using Pair = std::pair<nebula::String, Expression *>;
   std::vector<Pair> items_;
 };
 
@@ -221,7 +221,7 @@ class MapExpression final : public ContainerExpression {
                             : pool->makeAndAdd<MapExpression>(pool, items);
   }
 
-  using Item = std::pair<std::string, Expression *>;
+  using Item = std::pair<nebula::String, Expression *>;
 
   const Value &eval(ExpressionContext &ctx) override;
 

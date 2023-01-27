@@ -137,7 +137,7 @@ class StorageClient
       std::string condition);
 
   folly::Future<StatusOr<cpp2::GetUUIDResp>> getUUID(GraphSpaceID space,
-                                                     const std::string& name,
+                                                     const std::string&& name,
                                                      folly::EventBase* evb = nullptr);
 
   StorageRpcRespFuture<cpp2::LookupIndexResp> lookupIndex(

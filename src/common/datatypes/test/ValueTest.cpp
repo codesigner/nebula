@@ -59,11 +59,11 @@ TEST(Value, Arithmetics) {
 
     v = vStr1 + vStr2;
     EXPECT_EQ(Value::Type::STRING, v.type());
-    EXPECT_EQ(std::string("Hello World"), v.getStr());
+    EXPECT_EQ(nebula::String("Hello World"), v.getStr());
 
     v = vStr1 + vBool1;
     EXPECT_EQ(Value::Type::STRING, v.type());
-    EXPECT_EQ(std::string("Hello false"), v.getStr());
+    EXPECT_EQ(nebula::String("Hello false"), v.getStr());
     v = vBool1 + vBool2;
     EXPECT_EQ(Value::Type::NULLVALUE, v.type());
 
@@ -72,7 +72,7 @@ TEST(Value, Arithmetics) {
     EXPECT_DOUBLE_EQ(4.14, v.getFloat());
     v = vStr1 + vInt1;
     EXPECT_EQ(Value::Type::STRING, v.type());
-    EXPECT_EQ(std::string("Hello 1"), v.getStr());
+    EXPECT_EQ(nebula::String("Hello 1"), v.getStr());
 
     v = vInt1 + vBool2;
     EXPECT_EQ(Value::Type::NULLVALUE, v.type());
@@ -115,7 +115,7 @@ TEST(Value, Arithmetics) {
 
     v = vStr1 + vList2;
     EXPECT_EQ(Value::Type::LIST, v.type());
-    EXPECT_EQ(List({std::string("Hello "), 6, 4, 5}), v.getList());
+    EXPECT_EQ(List({nebula::String("Hello "), 6, 4, 5}), v.getList());
 
     v = vMap + vList1;
     EXPECT_EQ(Value::Type::LIST, v.type());
@@ -1233,11 +1233,11 @@ TEST(Value, TypeCast) {
     EXPECT_EQ(Value::Type::FLOAT, vf.type());
     EXPECT_EQ(vf.getFloat(), 123.0);
 
-    vf = Value(std::to_string(std::numeric_limits<double_t>::max())).toFloat();
+    vf = Value(folly::to<nebula::String>(std::numeric_limits<double_t>::max())).toFloat();
     EXPECT_EQ(Value::Type::FLOAT, vf.type());
     EXPECT_EQ(vf.getFloat(), std::numeric_limits<double_t>::max());
 
-    vf = Value(std::to_string(std::numeric_limits<double_t>::max())).toFloat();
+    vf = Value(folly::to<nebula::String>(std::numeric_limits<double_t>::max())).toFloat();
     EXPECT_EQ(Value::Type::FLOAT, vf.type());
     EXPECT_EQ(vf.getFloat(), std::numeric_limits<double_t>::max());
 
@@ -1674,7 +1674,7 @@ TEST(Value, DecodeEncode) {
       Value(Duration(-1, -2, -3)),
   };
   for (const auto& val : values) {
-    std::string buf;
+    nebula::String buf;
     buf.reserve(128);
     serializer::serialize(val, &buf);
     Value valCopy;
@@ -1861,7 +1861,7 @@ TEST(Value, Hash) {
         for (auto& v : m.kvs) {
           // Only the `key` participates in the hash, `value` is ignored.
           // It's easy to lead to hash collision if the `key` is the same.
-          seed ^= std::hash<std::string>()(v.first) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+          seed ^= std::hash<nebula::String>()(v.first) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
         }
         return seed;
       }

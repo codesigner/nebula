@@ -16,13 +16,13 @@
 namespace nebula {
 
 struct Tag {
-  std::string name;
-  std::unordered_map<std::string, Value> props;
+  String name;
+  ValueMap props;
 
   Tag() = default;
   Tag(Tag&& tag) noexcept : name(std::move(tag.name)), props(std::move(tag.props)) {}
   Tag(const Tag& tag) : name(tag.name), props(tag.props) {}
-  Tag(std::string tagName, std::unordered_map<std::string, Value> tagProps)
+  Tag(std::string tagName, ValueMap tagProps)
       : name(std::move(tagName)), props(std::move(tagProps)) {}
 
   void clear() {
@@ -34,7 +34,7 @@ struct Tag {
     clear();
   }
 
-  std::string toString() const;
+  String toString() const;
   folly::dynamic toJson() const;
 
   Tag& operator=(Tag&& rhs) noexcept {
@@ -60,13 +60,13 @@ struct Tag {
 
 struct Vertex {
   Value vid;
-  std::vector<Tag> tags;
+  TagVector tags;
   std::atomic<size_t> refcnt{1};
 
   Vertex() = default;
   Vertex(const Vertex& v) : vid(v.vid), tags(v.tags) {}
   Vertex(Vertex&& v) noexcept : vid(std::move(v.vid)), tags(std::move(v.tags)) {}
-  Vertex(Value id, std::vector<Tag> t) : vid(std::move(id)), tags(std::move(t)) {}
+  Vertex(Value id, TagVector t) : vid(std::move(id)), tags(std::move(t)) {}
 
   size_t ref() {
     return ++refcnt;
@@ -84,7 +84,7 @@ struct Vertex {
     clear();
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Used in Json form query result
   folly::dynamic getMetaData() const;
@@ -105,7 +105,7 @@ struct Vertex {
 
   bool contains(const Value& key) const;
 
-  const Value& value(const std::string& key) const;
+  const Value& value(const nebula::String& key) const;
 };
 
 inline void swap(Vertex& a, Vertex& b) {

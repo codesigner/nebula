@@ -145,9 +145,11 @@ void Date::subDuration(const Duration& duration) {
   return addDuration(-duration);
 }
 
-std::string Date::toString() const {
+String Date::toString() const {
   // It's in current timezone already
-  return folly::stringPrintf("%d-%02d-%02d", year, month, day);
+  String s;
+  fmt::format_to(std::back_inserter(s), "%d-%02d-%02d", year, month, day);
+  return s;
 }
 
 void Time::addDuration(const Duration& duration) {
@@ -205,12 +207,12 @@ void Time::subDuration(const Duration& duration) {
   addDuration(-duration);
 }
 
-std::string Time::toString() const {
-  return folly::sformat("{:0>2}:{:0>2}:{:0>2}.{:0>6}000",
-                        static_cast<uint8_t>(hour),
-                        static_cast<uint8_t>(minute),
-                        static_cast<uint8_t>(sec),
-                        static_cast<uint32_t>(microsec));
+nebula::String Time::toString() const {
+  return nebula::String(folly::sformat("{:0>2}:{:0>2}:{:0>2}.{:0>6}000",
+                                       static_cast<uint8_t>(hour),
+                                       static_cast<uint8_t>(minute),
+                                       static_cast<uint8_t>(sec),
+                                       static_cast<uint32_t>(microsec)));
 }
 
 void DateTime::addDuration(const Duration& duration) {
@@ -326,16 +328,16 @@ void DateTime::subDuration(const Duration& duration) {
   return addDuration(-duration);
 }
 
-std::string DateTime::toString() const {
+nebula::String DateTime::toString() const {
   // It's in current timezone already
-  return folly::sformat("{}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2}.{:0>6}000",
-                        static_cast<int16_t>(year),
-                        static_cast<uint8_t>(month),
-                        static_cast<uint8_t>(day),
-                        static_cast<uint8_t>(hour),
-                        static_cast<uint8_t>(minute),
-                        static_cast<uint8_t>(sec),
-                        static_cast<uint32_t>(microsec));
+  return nebula::String(folly::sformat("{}-{:0>2}-{:0>2}T{:0>2}:{:0>2}:{:0>2}.{:0>6}000",
+                                       static_cast<int16_t>(year),
+                                       static_cast<uint8_t>(month),
+                                       static_cast<uint8_t>(day),
+                                       static_cast<uint8_t>(hour),
+                                       static_cast<uint8_t>(minute),
+                                       static_cast<uint8_t>(sec),
+                                       static_cast<uint32_t>(microsec)));
 }
 
 }  // namespace nebula

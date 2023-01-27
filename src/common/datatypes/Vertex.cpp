@@ -11,17 +11,17 @@
 
 namespace nebula {
 
-std::string Tag::toString() const {
-  std::vector<std::string> value(props.size());
-  std::transform(props.begin(), props.end(), value.begin(), [](const auto& iter) -> std::string {
+nebula::String Tag::toString() const {
+  std::vector<nebula::String> value(props.size());
+  std::transform(props.begin(), props.end(), value.begin(), [](const auto& iter) -> nebula::String {
     std::stringstream out;
     out << iter.first << ":" << iter.second;
-    return out.str();
+    return nebula::String(out.str());
   });
 
   std::stringstream os;
   os << "Tag: " << name << ", " << folly::join(",", value);
-  return os.str();
+  return nebula::String(os.str());
 }
 
 //  {
@@ -51,7 +51,7 @@ bool Vertex::contains(const Value& key) const {
   return false;
 }
 
-const Value& Vertex::value(const std::string& key) const {
+const Value& Vertex::value(const nebula::String& key) const {
   for (const auto& tag : tags) {
     auto find = tag.props.find(key);
     if (find != tag.props.end()) {
@@ -61,7 +61,7 @@ const Value& Vertex::value(const std::string& key) const {
   return Value::kNullValue;
 }
 
-std::string Vertex::toString() const {
+nebula::String Vertex::toString() const {
   std::stringstream os;
   os << "(" << vid << ")";
   if (!tags.empty()) {
@@ -70,7 +70,7 @@ std::string Vertex::toString() const {
       os << tag.toString();
     }
   }
-  return os.str();
+  return nebula::String(os.str());
 }
 
 // {
@@ -130,11 +130,12 @@ namespace std {
 
 // Inject a customized hash function
 std::size_t hash<nebula::Tag>::operator()(const nebula::Tag& h) const noexcept {
-  return folly::hash::fnv64(h.name);
+  return folly::hash::fnv64_buf(h.name.data(), h.name.size());
 }
 
 std::size_t hash<nebula::Vertex>::operator()(const nebula::Vertex& h) const {
-  size_t hv = folly::hash::fnv64(h.vid.toString());
+  nebula::String s = h.vid.toString();
+  size_t hv = folly::hash::fnv64_buf(s.data(), s.size());
   for (auto& t : h.tags) {
     hv += (hv << 1) + (hv << 4) + (hv << 5) + (hv << 7) + (hv << 8) + (hv << 40);
     hv ^= hash<nebula::Tag>()(t);

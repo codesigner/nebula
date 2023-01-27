@@ -91,7 +91,7 @@ Value RowReaderV2::getValueByIndex(const int64_t index) const {
     case PropertyType::VID: {
       // This is to be compatible with V1, so we treat it as
       // 8-byte long string
-      return std::string(&data_[offset], sizeof(int64_t));
+      return nebula::String(&data_[offset], sizeof(int64_t));
     }
     case PropertyType::FLOAT: {
       float val;
@@ -109,13 +109,13 @@ Value RowReaderV2::getValueByIndex(const int64_t index) const {
       memcpy(reinterpret_cast<void*>(&strOffset), &data_[offset], sizeof(int32_t));
       memcpy(reinterpret_cast<void*>(&strLen), &data_[offset + sizeof(int32_t)], sizeof(int32_t));
       if (static_cast<size_t>(strOffset) == data_.size() && strLen == 0) {
-        return std::string();
+        return nebula::String();
       }
       CHECK_LT(strOffset, data_.size());
-      return std::string(&data_[strOffset], strLen);
+      return nebula::String(&data_[strOffset], strLen);
     }
     case PropertyType::FIXED_STRING: {
-      return std::string(&data_[offset], field->size());
+      return nebula::String(&data_[offset], field->size());
     }
     case PropertyType::TIMESTAMP: {
       Timestamp ts;
@@ -196,7 +196,7 @@ Value RowReaderV2::getValueByIndex(const int64_t index) const {
         return Value::kEmpty;  // Is it ok to return Value::kEmpty?
       }
       CHECK_LT(strOffset, data_.size());
-      auto wkb = std::string(&data_[strOffset], strLen);
+      auto wkb = nebula::String(&data_[strOffset], strLen);
       // Parse a geography from the wkb, normalize it and then verify its validity.
       auto geogRet = Geography::fromWKB(wkb, true, true);
       if (!geogRet.ok()) {

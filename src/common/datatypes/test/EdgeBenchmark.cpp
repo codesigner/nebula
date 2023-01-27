@@ -28,8 +28,8 @@ Integral2 random(Integral1 low, Integral2 up) {
   return range(rng);
 }
 
-std::string randomString(size_t size = 1000) {
-  std::string str(size, ' ');
+nebula::String randomString(size_t size = 1000) {
+  nebula::String str(size, ' ');
   for (size_t p = 0; p < size; p++) {
     str[p] = random('a', 'z');
   }

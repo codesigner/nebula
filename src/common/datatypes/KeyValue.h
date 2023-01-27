@@ -9,13 +9,13 @@
 namespace nebula {
 
 struct KeyValue {
-  std::string key;
-  std::string value;
+  String key;
+  String value;
 
   KeyValue() {}
   KeyValue(KeyValue&& rhs) noexcept : key(std::move(rhs.key)), value(std::move(rhs.value)) {}
   KeyValue(const KeyValue& rhs) : key(rhs.key), value(rhs.value) {}
-  explicit KeyValue(std::pair<std::string, std::string> kv)
+  explicit KeyValue(std::pair<String, String> kv)
       : key(std::move(kv.first)), value(std::move(kv.second)) {}
 
   void clear() {

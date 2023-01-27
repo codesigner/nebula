@@ -12,7 +12,7 @@
 
 namespace nebula {
 
-std::string Edge::toString() const {
+nebula::String Edge::toString() const {
   std::stringstream os;
   os << "(" << src << ")"
      << "-"
@@ -29,7 +29,7 @@ std::string Edge::toString() const {
     });
     os << " " << folly::join(",", value);
   }
-  return os.str();
+  return nebula::String(os.str());
 }
 
 // format:
@@ -78,7 +78,7 @@ bool Edge::contains(const Value& key) const {
   return props.find(key.getStr()) != props.end();
 }
 
-const Value& Edge::value(const std::string& key) const {
+const Value& Edge::value(const nebula::String& key) const {
   auto find = props.find(key);
   if (find != props.end()) {
     return find->second;
@@ -136,8 +136,8 @@ bool Edge::keyEqual(const Edge& rhs) const {
   return src == rhs.dst && dst == rhs.src && ranking == rhs.ranking;
 }
 
-std::string Edge::id() const {
-  std::string s;
+nebula::String Edge::id() const {
+  nebula::String s;
   // FIXME(czp): How to distinguish between `11->2@90` and `1->12@90`?
   if (src.type() == Value::Type::INT) {
     EdgeType t = type > 0 ? type : -type;
@@ -151,8 +151,8 @@ std::string Edge::id() const {
   } else {
     DCHECK(src.type() == Value::Type::STRING);
     EdgeType t = type > 0 ? type : -type;
-    const std::string& srcId = type > 0 ? src.getStr() : dst.getStr();
-    const std::string& dstId = type > 0 ? dst.getStr() : src.getStr();
+    const nebula::String& srcId = type > 0 ? src.getStr() : dst.getStr();
+    const nebula::String& dstId = type > 0 ? dst.getStr() : src.getStr();
     s.reserve(srcId.size() + dstId.size() + sizeof(t) + sizeof(ranking));
     s.append(srcId.data(), srcId.size());
     s.append(dstId.data(), dstId.size());
@@ -171,8 +171,8 @@ std::size_t hash<nebula::Edge>::operator()(const nebula::Edge& h) const {
   const auto& src = h.type > 0 ? h.src.toString() : h.dst.toString();
   const auto& dst = h.type > 0 ? h.dst.toString() : h.src.toString();
   auto type = h.type > 0 ? h.type : -h.type;
-  size_t hv = folly::hash::fnv64(src);
-  hv = folly::hash::fnv64(dst, hv);
+  uint64_t hv = folly::hash::fnv64_buf(src.data(), src.size());
+  hv = folly::hash::fnv64_buf(dst.data(), dst.size(), hv);
   hv = folly::hash::fnv64_buf(reinterpret_cast<const void*>(&type), sizeof(type), hv);
   return folly::hash::fnv64_buf(reinterpret_cast<const void*>(&h.ranking), sizeof(h.ranking), hv);
 }

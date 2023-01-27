@@ -6,6 +6,7 @@
 #include "common/expression/test/ExpressionContextMock.h"
 
 #include "common/datatypes/Edge.h"
+#include "common/datatypes/Type.h"
 #include "common/datatypes/Vertex.h"
 
 namespace nebula {
@@ -29,16 +30,16 @@ std::vector<Value> ExpressionContextMock::vals_ = {
     Value(false),
     Value(1),
     Value(1.1),
-    Value(std::string(16, 'a')),
-    Value(std::string(32, 'a')),
-    Value(std::string(64, 'a')),
-    Value(std::string(128, 'a')),
-    Value(std::string(256, 'a')),
-    Value(std::string(4096, 'a')),
-    Value(List(std::vector<Value>(16, Value("aaaa")))),
-    Value(List(std::vector<Value>(16, Value(List(std::vector<Value>(16, Value("aaaa"))))))),
+    Value(nebula::String(16, 'a')),
+    Value(nebula::String(32, 'a')),
+    Value(nebula::String(64, 'a')),
+    Value(nebula::String(128, 'a')),
+    Value(nebula::String(256, 'a')),
+    Value(nebula::String(4096, 'a')),
+    Value(List(nebula::ValueVector(16, Value("aaaa")))),
+    Value(List(nebula::ValueVector(16, Value(List(nebula::ValueVector(16, Value("aaaa"))))))),
     Value(1),
-    Value(List(std::vector<Value>{1, 2, 3, 4, 5, 6, 7, 8})),
+    Value(List(nebula::ValueVector{1, 2, 3, 4, 5, 6, 7, 8})),
     Value(1),
     Value(1),
     Value(1),

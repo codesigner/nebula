@@ -180,11 +180,11 @@ Value::Value(double&& v) {
   setF(std::move(v));
 }
 
-Value::Value(const std::string& v) {
+Value::Value(const String& v) {
   setS(v);
 }
 
-Value::Value(std::string&& v) {
+Value::Value(String&& v) {
   setS(std::move(v));
 }
 
@@ -292,11 +292,11 @@ Value::Value(Duration&& v) {
   setDU(std::make_unique<Duration>(std::move(v)));
 }
 
-Value::Value(const std::unordered_map<std::string, Value>& map) {
+Value::Value(const ValueMap& map) {
   setM(std::make_unique<Map>(map));
 }
 
-Value::Value(std::unordered_map<std::string, Value>&& map) {
+Value::Value(ValueMap&& map) {
   setM(std::make_unique<Map>(std::move(map)));
 }
 
@@ -418,12 +418,12 @@ void Value::setFloat(double&& v) {
   setF(std::move(v));
 }
 
-void Value::setStr(const std::string& v) {
+void Value::setStr(const String& v) {
   clear();
   setS(v);
 }
 
-void Value::setStr(std::string&& v) {
+void Value::setStr(String&& v) {
   clear();
   setS(std::move(v));
 }
@@ -603,7 +603,7 @@ const double& Value::getFloat() const {
   return value_.fVal;
 }
 
-const std::string& Value::getStr() const {
+const String& Value::getStr() const {
   CHECK_EQ(type_, Type::STRING);
   return *value_.sVal;
 }
@@ -733,7 +733,7 @@ double& Value::mutableFloat() {
   return value_.fVal;
 }
 
-std::string& Value::mutableStr() {
+String& Value::mutableStr() {
   CHECK_EQ(type_, Type::STRING);
   return *value_.sVal;
 }
@@ -826,9 +826,9 @@ double Value::moveFloat() {
   return std::move(v);
 }
 
-std::string Value::moveStr() {
+String Value::moveStr() {
   CHECK_EQ(type_, Type::STRING);
-  std::string v = std::move(*value_.sVal);
+  String v = std::move(*value_.sVal);
   clear();
   return v;
 }
@@ -1224,23 +1224,23 @@ void Value::setF(double&& v) {
   type_ = Type::FLOAT;
 }
 
-void Value::setS(std::unique_ptr<std::string> v) {
-  new (std::addressof(value_.sVal)) std::unique_ptr<std::string>(std::move(v));
+void Value::setS(std::unique_ptr<String> v) {
+  new (std::addressof(value_.sVal)) std::unique_ptr<String>(std::move(v));
   type_ = Type::STRING;
 }
 
-void Value::setS(const std::string& v) {
-  new (std::addressof(value_.sVal)) std::unique_ptr<std::string>(new std::string(v));
+void Value::setS(const String& v) {
+  new (std::addressof(value_.sVal)) std::unique_ptr<String>(new String(v));
   type_ = Type::STRING;
 }
 
-void Value::setS(std::string&& v) {
-  new (std::addressof(value_.sVal)) std::unique_ptr<std::string>(new std::string(std::move(v)));
+void Value::setS(String&& v) {
+  new (std::addressof(value_.sVal)) std::unique_ptr<String>(new String(std::move(v)));
   type_ = Type::STRING;
 }
 
 void Value::setS(const char* v) {
-  new (std::addressof(value_.sVal)) std::unique_ptr<std::string>(new std::string(v));
+  new (std::addressof(value_.sVal)) std::unique_ptr<String>(new String(v));
   type_ = Type::STRING;
 }
 
@@ -1565,7 +1565,7 @@ folly::dynamic Value::getMetaData() const {
   return folly::dynamic(nullptr);
 }
 
-std::string Value::toString() const {
+nebula::String Value::toString() const {
   switch (type_) {
     case Value::Type::__EMPTY__: {
       return "__EMPTY__";
@@ -1596,10 +1596,10 @@ std::string Value::toString() const {
       return getBool() ? "true" : "false";
     }
     case Value::Type::INT: {
-      return folly::to<std::string>(getInt());
+      return folly::to<nebula::String>(getInt());
     }
     case Value::Type::FLOAT: {
-      return folly::to<std::string>(getFloat());
+      return folly::to<nebula::String>(getFloat());
     }
     case Value::Type::STRING: {
       return "\"" + getStr() + "\"";
@@ -1725,7 +1725,7 @@ Value Value::toInt() const {
       char* pEnd;
       auto it = std::find(str.begin(), str.end(), '.');
 
-      auto checkSciNotation = [](std::string s) {
+      auto checkSciNotation = [](String s) {
         auto it1 = std::find(s.begin(), s.end(), 'e');
         auto it2 = std::find(s.begin(), s.end(), 'E');
 
@@ -1998,7 +1998,7 @@ void swap(Value& a, Value& b) {
   b = std::move(temp);
 }
 
-/*static*/ const std::string Value::toString(Type type) {
+/*static*/ const nebula::String Value::toString(Type type) {
   switch (type) {
     case Value::Type::__EMPTY__: {
       return "__EMPTY__";
@@ -2077,8 +2077,12 @@ Value operator+(const Value& lhs, const Value& rhs) {
     case Value::Type::BOOL: {
       switch (rhs.type()) {
         case Value::Type::STRING: {
-          return folly::stringPrintf(
-              "%s%s", lhs.getBool() ? "true" : "false", rhs.getStr().c_str());
+          String s;
+          fmt::format_to(std::back_inserter(s),
+                         "%s%s",
+                         lhs.getBool() ? "true" : "false",
+                         rhs.getStr().c_str());
+          return s;
         }
         case Value::Type::LIST: {
           auto ret = rhs.getList();
@@ -2105,7 +2109,9 @@ Value operator+(const Value& lhs, const Value& rhs) {
           return lhs.getInt() + rhs.getFloat();
         }
         case Value::Type::STRING: {
-          return folly::stringPrintf("%ld%s", lhs.getInt(), rhs.getStr().c_str());
+          String s;
+          fmt::format_to(std::back_inserter(s), "%ld%s", lhs.getInt(), rhs.getStr().c_str());
+          return s;
         }
         case Value::Type::DATE: {
           return rhs.getDate() + lhs.getInt();
@@ -2129,7 +2135,7 @@ Value operator+(const Value& lhs, const Value& rhs) {
           return lhs.getFloat() + rhs.getFloat();
         }
         case Value::Type::STRING: {
-          return folly::to<std::string>(lhs.getFloat()) + rhs.getStr();
+          return folly::to<nebula::String>(lhs.getFloat()) + rhs.getStr();
         }
         case Value::Type::LIST: {
           auto ret = rhs.getList();
@@ -2144,14 +2150,20 @@ Value operator+(const Value& lhs, const Value& rhs) {
     case Value::Type::STRING: {
       switch (rhs.type()) {
         case Value::Type::BOOL: {
-          return folly::stringPrintf(
-              "%s%s", lhs.getStr().c_str(), rhs.getBool() ? "true" : "false");
+          String s;
+          fmt::format_to(std::back_inserter(s),
+                         "%s%s",
+                         lhs.getStr().c_str(),
+                         rhs.getBool() ? "true" : "false");
+          return s;
         }
         case Value::Type::INT: {
-          return folly::stringPrintf("%s%ld", lhs.getStr().c_str(), rhs.getInt());
+          String s;
+          fmt::format_to(std::back_inserter(s), "%s%ld", lhs.getStr().c_str(), rhs.getInt());
+          return s;
         }
         case Value::Type::FLOAT: {
-          return lhs.getStr() + folly::to<std::string>(rhs.getFloat());
+          return lhs.getStr() + folly::to<String>(rhs.getFloat());
         }
         case Value::Type::STRING: {
           return lhs.getStr() + rhs.getStr();
@@ -2830,7 +2842,7 @@ std::size_t Value::hash() const {
       return std::hash<double>()(getFloat());
     }
     case Type::STRING: {
-      return std::hash<std::string>()(getStr());
+      return std::hash<nebula::String>()(getStr());
     }
     case Type::DATE: {
       return std::hash<Date>()(getDate());

@@ -1115,8 +1115,8 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string value(args[0].get().getStr());
-          folly::toLowerAscii(value);
+          nebula::String value(args[0].get().getStr());
+          folly::toLowerAscii(value.data(), value.size());
           return value;
         }
         default: {
@@ -1137,7 +1137,7 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string value(args[0].get().getStr());
+          nebula::String value(args[0].get().getStr());
           std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
             return std::toupper(c);
           });
@@ -1185,8 +1185,8 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string value(args[0].get().getStr());
-          return folly::trimWhitespace(value).toString();
+          nebula::String value(args[0].get().getStr());
+          return folly::trimWhitespace(value).to<nebula::String>();
         }
         default: {
           return Value::kNullBadType;
@@ -1205,8 +1205,8 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string value(args[0].get().getStr());
-          return folly::ltrimWhitespace(value).toString();
+          nebula::String value(args[0].get().getStr());
+          return folly::ltrimWhitespace(value).to<nebula::String>();
         }
         default: {
           return Value::kNullBadType;
@@ -1225,8 +1225,8 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string value(args[0].get().getStr());
-          return folly::rtrimWhitespace(value).toString();
+          nebula::String value(args[0].get().getStr());
+          return folly::rtrimWhitespace(value).to<nebula::String>();
         }
         default: {
           return Value::kNullBadType;
@@ -1304,9 +1304,9 @@ FunctionManager::FunctionManager() {
         return Value::kNullValue;
       }
       if (args[0].get().isStr() && args[1].get().isStr() && args[2].get().isStr()) {
-        std::string origStr(args[0].get().getStr());
-        std::string search(args[1].get().getStr());
-        std::string newStr(args[2].get().getStr());
+        nebula::String origStr(args[0].get().getStr());
+        nebula::String search(args[1].get().getStr());
+        nebula::String newStr(args[2].get().getStr());
         return boost::replace_all_copy(origStr, search, newStr);
       }
       return Value::kNullBadType;
@@ -1323,7 +1323,7 @@ FunctionManager::FunctionManager() {
           return Value::kNullValue;
         }
         case Value::Type::STRING: {
-          std::string origStr(args[0].get().getStr());
+          nebula::String origStr(args[0].get().getStr());
           std::reverse(origStr.begin(), origStr.end());
           return origStr;
         }
@@ -1362,7 +1362,7 @@ FunctionManager::FunctionManager() {
           std::vector<folly::StringPiece> substrings;
           folly::split<folly::StringPiece>(delim, origStr, substrings);
           for (auto str : substrings) {
-            res.emplace_back(str.toString());
+            res.emplace_back(str.to<nebula::String>());
           }
           return res;
         }
@@ -1382,10 +1382,10 @@ FunctionManager::FunctionManager() {
         case Value::Type::NULLVALUE:
           return Value::kNullValue;
         case Value::Type::INT: {
-          return folly::to<std::string>(args[0].get().getInt());
+          return folly::to<nebula::String>(args[0].get().getInt());
         }
         case Value::Type::FLOAT: {
-          auto str = folly::to<std::string>(args[0].get().getFloat());
+          auto str = folly::to<nebula::String>(args[0].get().getFloat());
           std::size_t found = str.find('.');
           if (found == std::string::npos) {
             str += ".0";
@@ -1451,7 +1451,7 @@ FunctionManager::FunctionManager() {
         auto value = args[0].get().getStr();
         auto size = args[1].get().getInt();
         if (size < 0) {
-          return std::string("");
+          return nebula::String("");
         } else if (size < static_cast<int64_t>(value.size())) {
           return value.substr(0, static_cast<int32_t>(size));
         } else {
@@ -1464,7 +1464,7 @@ FunctionManager::FunctionManager() {
           }
           stream << extra.substr(0, size);
           stream << value;
-          return stream.str();
+          return nebula::String(stream.str());
         }
       }
       return Value::kNullBadType;
@@ -1494,7 +1494,7 @@ FunctionManager::FunctionManager() {
             size -= extra.size();
           }
           stream << extra.substr(0, size);
-          return stream.str();
+          return nebula::String(stream.str());
         }
       }
       return Value::kNullBadType;
@@ -1528,7 +1528,7 @@ FunctionManager::FunctionManager() {
         return Value::kNullBadData;
       }
       if (static_cast<size_t>(start) >= value.size() || length == 0) {
-        return std::string("");
+        return nebula::String("");
       }
       return value.substr(start, length);
     };
@@ -1585,7 +1585,7 @@ FunctionManager::FunctionManager() {
       // }
       // TODO
       UNUSED(args);
-      return std::string("");
+      return nebula::String("");
     };
   }
   {
@@ -2181,7 +2181,7 @@ FunctionManager::FunctionManager() {
     attr.maxArity_ = 1;
     attr.isAlwaysPure_ = true;
     attr.body_ = [](const auto &args) -> Value {
-      std::set<std::string> tmp;
+      std::set<nebula::String> tmp;
       switch (args[0].get().type()) {
         case Value::Type::NULLVALUE: {
           return Value::kNullValue;
@@ -2255,7 +2255,7 @@ FunctionManager::FunctionManager() {
           if (list.empty()) {
             return List();
           }
-          return List(std::vector<Value>(list.values.begin() + 1, list.values.end()));
+          return List(ValueVector(list.values.begin() + 1, list.values.end()));
         }
         default: {
           return Value::kNullBadType;
@@ -2425,7 +2425,7 @@ FunctionManager::FunctionManager() {
       if (args[0].get().isNull() || !args[0].get().isStr()) {
         return Value::kNullValue;
       }
-      std::vector<std::string> result;
+      std::vector<nebula::String> result;
       result.reserve(args.size() - 1);
       for (size_t i = 1; i < args.size(); ++i) {
         switch (args[i].get().type()) {
@@ -2727,7 +2727,7 @@ FunctionManager::FunctionManager() {
       std::vector<uint64_t> cellIds = geo::GeoFunction::s2CoveringCellIds(
           args[0].get().getGeography(), minLevel, maxLevel, maxCells, bufferInMeters);
       // TODO(jie) Should return uint64_t List
-      std::vector<Value> vals;
+      ValueVector vals;
       vals.reserve(cellIds.size());
       for (uint64_t cellId : cellIds) {
         const char *tmp = reinterpret_cast<const char *>(&cellId);

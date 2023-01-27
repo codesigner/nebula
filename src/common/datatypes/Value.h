@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "common/datatypes/Type.h"
 #include "common/datatypes/Date.h"
 #include "common/datatypes/Duration.h"
 #include "common/thrift/ThriftTypes.h"
@@ -107,8 +108,8 @@ struct Value {
   Value(int64_t&& v);                                        // NOLINT
   Value(const double& v);                                    // NOLINT
   Value(double&& v);                                         // NOLINT
-  Value(const std::string& v);                               // NOLINT
-  Value(std::string&& v);                                    // NOLINT
+  Value(const String& v);                                    // NOLINT
+  Value(String&& v);                                         // NOLINT
   Value(const char* v);                                      // NOLINT
   Value(const Date& v);                                      // NOLINT
   Value(Date&& v);                                           // NOLINT
@@ -134,8 +135,8 @@ struct Value {
   Value(Geography&& v);                                      // NOLINT
   Value(const Duration& v);                                  // NOLINT
   Value(Duration&& v);                                       // NOLINT
-  Value(const std::unordered_map<std::string, Value>& map);  // NOLINT
-  Value(std::unordered_map<std::string, Value>&& map);       // NOLINT
+  Value(const ValueMap& map);                                // NOLINT
+  Value(ValueMap&& map);                                     // NOLINT
   ~Value() {
     clear();
   }
@@ -145,7 +146,7 @@ struct Value {
   }
 
   const std::string& typeName() const;
-  static const std::string toString(Type type);
+  static const nebula::String toString(Type type);
 
   bool empty() const {
     return type_ == Type::__EMPTY__;
@@ -249,8 +250,8 @@ struct Value {
   void setInt(int64_t&& v);
   void setFloat(const double& v);
   void setFloat(double&& v);
-  void setStr(const std::string& v);
-  void setStr(std::string&& v);
+  void setStr(const String& v);
+  void setStr(String&& v);
   void setStr(const char* v);
   void setDate(const Date& v);
   void setDate(Date&& v);
@@ -296,7 +297,7 @@ struct Value {
     return value_.iVal;
   }
   const double& getFloat() const;
-  const std::string& getStr() const;
+  const String& getStr() const;
   const Date& getDate() const;
   const Time& getTime() const;
   const DateTime& getDateTime() const;
@@ -323,7 +324,7 @@ struct Value {
   bool moveBool();
   int64_t moveInt();
   double moveFloat();
-  std::string moveStr();
+  String moveStr();
   Date moveDate();
   Time moveTime();
   DateTime moveDateTime();
@@ -341,7 +342,7 @@ struct Value {
   bool& mutableBool();
   int64_t& mutableInt();
   double& mutableFloat();
-  std::string& mutableStr();
+  String& mutableStr();
   Date& mutableDate();
   Time& mutableTime();
   DateTime& mutableDateTime();
@@ -359,7 +360,7 @@ struct Value {
     return kNullValue;
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
   folly::dynamic toJson() const;
   // Used in Json form query result
   folly::dynamic getMetaData() const;
@@ -391,7 +392,7 @@ struct Value {
     bool bVal;
     int64_t iVal;
     double fVal;
-    std::unique_ptr<std::string> sVal;
+    std::unique_ptr<String> sVal;
     Date dVal;
     Time tVal;
     DateTime dtVal;
@@ -427,10 +428,10 @@ struct Value {
   void setF(const double& v);
   void setF(double&& v);
   // String value
-  void setS(const std::string& v);
-  void setS(std::string&& v);
+  void setS(const String& v);
+  void setS(String&& v);
   void setS(const char* v);
-  void setS(std::unique_ptr<std::string> v);
+  void setS(std::unique_ptr<String> v);
   // Date value
   void setD(const Date& v);
   void setD(Date&& v);
@@ -561,7 +562,7 @@ struct hash<nebula::Value> {
     if (h.isInt()) {
       return h.getInt();
     } else if (h.isStr()) {
-      return std::hash<std::string>()(h.getStr());
+      return std::hash<nebula::String>()(h.getStr());
     }
     return h.hash();
   }
