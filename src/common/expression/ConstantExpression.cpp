@@ -35,8 +35,8 @@ void ConstantExpression::accept(ExprVisitor* visitor) {
   visitor->visit(this);
 }
 
-std::string ConstantExpression::toString() const {
-  std::stringstream out;
+nebula::String ConstantExpression::toString() const {
+  nebula::Ostringstream out;
   out << val_;
   return out.str();
 }

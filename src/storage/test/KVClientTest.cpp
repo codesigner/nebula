@@ -62,8 +62,8 @@ TEST(KVClientTest, SimpleTest) {
   {
     std::vector<nebula::KeyValue> pairs;
     for (int32_t i = 0; i < 10; i++) {
-      auto key = std::to_string(i);
-      auto value = std::to_string(i);
+      auto key = folly::to<nebula::String>(i);
+      auto value = folly::to<nebula::String>(i);
       nebula::KeyValue pair(std::make_pair(key, value));
       pairs.emplace_back(std::move(pair));
     }
@@ -73,7 +73,7 @@ TEST(KVClientTest, SimpleTest) {
     LOG(INFO) << "Put Successfully";
   }
   {
-    std::vector<std::string> keys;
+    std::vector<nebula::String> keys;
     for (int32_t i = 0; i < 10; i++) {
       keys.emplace_back(std::to_string(i));
     }
@@ -85,7 +85,7 @@ TEST(KVClientTest, SimpleTest) {
     checkResult(resp, 10);
   }
   {
-    std::vector<std::string> keys;
+    std::vector<nebula::String> keys;
     for (int32_t i = 0; i < 20; i++) {
       keys.emplace_back(std::to_string(i));
     }
@@ -103,7 +103,7 @@ TEST(KVClientTest, SimpleTest) {
     // part return E_PARTIAL_RESULT
   }
   {
-    std::vector<std::string> keys;
+    std::vector<nebula::String> keys;
     for (int32_t i = 0; i < 20; i++) {
       keys.emplace_back(std::to_string(i));
     }
@@ -116,7 +116,7 @@ TEST(KVClientTest, SimpleTest) {
   }
   {
     // try to get keys all not exists
-    std::vector<std::string> keys;
+    std::vector<nebula::String> keys;
     for (int32_t i = 10; i < 20; i++) {
       keys.emplace_back(std::to_string(i));
     }

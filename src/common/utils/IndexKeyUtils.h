@@ -178,9 +178,9 @@ class IndexKeyUtils final {
     return val;
   }
 
-  static std::string encodeUint64(uint64_t v) {
+  static nebula::String encodeUint64(uint64_t v) {
     auto val = folly::Endian::big(v);
-    std::string raw;
+    nebula::String raw;
     raw.reserve(sizeof(uint64_t));
     raw.append(reinterpret_cast<const char*>(&val), sizeof(uint64_t));
     return raw;

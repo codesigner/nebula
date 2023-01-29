@@ -94,8 +94,8 @@ const Value& UnaryExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string UnaryExpression::toString() const {
-  std::string op;
+nebula::String UnaryExpression::toString() const {
+  nebula::String op;
   switch (kind_) {
     case Kind::kUnaryPlus:
       op = "+";
@@ -124,7 +124,7 @@ std::string UnaryExpression::toString() const {
       DLOG(FATAL) << "Illegal kind for unary expression: " << static_cast<int>(kind());
       op = " Invalid unary expression ";
   }
-  std::stringstream out;
+  nebula::stringstream out;
   out << op << "(" << (operand_ ? operand_->toString() : "") << ")";
   return out.str();
 }

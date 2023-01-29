@@ -104,8 +104,8 @@ void ReduceExpression::resetFrom(Decoder& decoder) {
   }
 }
 
-std::string ReduceExpression::toString() const {
-  std::string buf;
+nebula::String ReduceExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += "reduce";

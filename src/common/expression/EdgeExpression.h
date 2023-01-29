@@ -33,7 +33,7 @@ class EdgeExpression final : public Expression {
     return EdgeExpression::make(pool_);
   }
 
-  std::string toString() const override {
+  nebula::String toString() const override {
     return "EDGE";
   }
 

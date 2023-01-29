@@ -81,8 +81,8 @@ const Value& CaseExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string CaseExpression::toString() const {
-  std::string buf;
+nebula::String CaseExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   if (isGeneric_) {

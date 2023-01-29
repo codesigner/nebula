@@ -18,6 +18,8 @@ struct Tag;
 struct Value;
 struct List;
 
+typedef std::basic_stringstream<char, std::char_traits<char>, Allocator<char>> stringstream;
+
 typedef typename std::basic_string<char, std::char_traits<char>, Allocator<char>> String;
 
 typedef typename std::vector<String, Allocator<String>> StringVector;

@@ -57,8 +57,8 @@ void AggregateExpression::apply(AggData* aggData, const Value& val) {
   AggFunctionManager::get(name_).value()(aggData, val);
 }
 
-std::string AggregateExpression::toString() const {
-  std::stringstream out;
+nebula::String AggregateExpression::toString() const {
+  nebula::stringstream out;
   DCHECK(!!arg_);
   auto argStr = arg_->toString();
   if (arg_->kind() == Expression::Kind::kConstant &&

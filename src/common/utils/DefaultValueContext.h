@@ -32,42 +32,43 @@ class DefaultValueContext final : public ExpressionContext {
     return Value::kEmpty;
   }
 
-  const Value& getVarProp(const std::string&, const std::string&) const override {
+  const Value& getVarProp(const nebula::String&, const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  StatusOr<std::size_t> getVarPropIndex(const std::string&, const std::string&) const override {
+  StatusOr<std::size_t> getVarPropIndex(const nebula::String&,
+                                        const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Status::Error("Unimplemented");
   }
 
-  Value getEdgeProp(const std::string&, const std::string&) const override {
+  Value getEdgeProp(const nebula::String&, const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  Value getTagProp(const std::string&, const std::string&) const override {
+  Value getTagProp(const nebula::String&, const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  Value getSrcProp(const std::string&, const std::string&) const override {
+  Value getSrcProp(const nebula::String&, const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  const Value& getDstProp(const std::string&, const std::string&) const override {
+  const Value& getDstProp(const nebula::String&, const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  const Value& getInputProp(const std::string&) const override {
+  const Value& getInputProp(const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Value::kEmpty;
   }
 
-  StatusOr<std::size_t> getInputPropIndex(const std::string&) const override {
+  StatusOr<std::size_t> getInputPropIndex(const nebula::String&) const override {
     DLOG(FATAL) << "Not allowed to call";
     return Status::Error("Unimplemented");
   }

@@ -14,7 +14,7 @@ const Value& LabelExpression::eval(ExpressionContext&) {
   return result_;
 }
 
-std::string LabelExpression::toString() const {
+nebula::String LabelExpression::toString() const {
   return name_;
 }
 

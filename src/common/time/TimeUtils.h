@@ -107,7 +107,7 @@ class TimeUtils {
     return dt;
   }
 
-  static Value getDateTimeAttr(const DateTime &dt, const std::string &prop) {
+  static Value getDateTimeAttr(const DateTime &dt, const nebula::String &prop) {
     auto lowerProp = boost::algorithm::to_lower_copy(prop);
     if (lowerProp == "year") {
       return static_cast<int>(dt.year);
@@ -151,7 +151,7 @@ class TimeUtils {
     return TimeConversion::unixSecondsToDate(unixTime);
   }
 
-  static Value getDateAttr(const Date &d, const std::string &prop) {
+  static Value getDateAttr(const Date &d, const nebula::String &prop) {
     auto lowerProp = boost::algorithm::to_lower_copy(prop);
     if (lowerProp == "year") {
       return d.year;
@@ -192,7 +192,7 @@ class TimeUtils {
     return t;
   }
 
-  static Value getTimeAttr(const Time &t, const std::string &prop) {
+  static Value getTimeAttr(const Time &t, const nebula::String &prop) {
     auto lowerProp = boost::algorithm::to_lower_copy(prop);
     if (lowerProp == "hour") {
       return t.hour;

@@ -28,8 +28,8 @@ const Value& UUIDExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string UUIDExpression::toString() const {
-  return folly::stringPrintf("uuid()");
+nebula::String UUIDExpression::toString() const {
+  return "uuid()";
 }
 
 void UUIDExpression::accept(ExprVisitor* visitor) {

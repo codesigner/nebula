@@ -37,9 +37,9 @@ class PredicateExpression final : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
-  std::string rawString() const override {
+  nebula::String rawString() const override {
     return hasOriginString() ? originString_ : toString();
   }
 
@@ -123,7 +123,7 @@ class PredicateExpression final : public Expression {
   std::string innerVar_;
   Expression* collection_;
   Expression* filter_;
-  std::string originString_;
+  nebula::String originString_;
   Value result_;
 };
 

@@ -134,9 +134,9 @@ class Expression {
     return !operator==(rhs);
   }
 
-  virtual std::string toString() const = 0;
+  virtual nebula::String toString() const = 0;
 
-  virtual std::string rawString() const {
+  virtual nebula::String rawString() const {
     return toString();
   }
 

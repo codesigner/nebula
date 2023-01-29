@@ -201,8 +201,8 @@ const Value& RelationalExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string RelationalExpression::toString() const {
-  std::string op;
+nebula::String RelationalExpression::toString() const {
+  nebula::String op;
   switch (kind_) {
     case Kind::kRelLT:
       op = "<";
@@ -253,7 +253,7 @@ std::string RelationalExpression::toString() const {
       DLOG(FATAL) << "Illegal kind for relational expression: " << static_cast<int>(kind());
       op = " Invalid relational expression ";
   }
-  std::stringstream out;
+  nebula::stringstream out;
   out << "(" << (lhs_ ? lhs_->toString() : "") << op << (rhs_ ? rhs_->toString() : "") << ")";
   return out.str();
 }

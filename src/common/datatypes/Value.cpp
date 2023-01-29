@@ -608,6 +608,11 @@ const String& Value::getStr() const {
   return *value_.sVal;
 }
 
+const std::string Value::getStdStr() const {
+  CHECK_EQ(type_, Type::STRING);
+  return std::string(*value_.sVal);
+}
+
 const Date& Value::getDate() const {
   CHECK_EQ(type_, Type::DATE);
   return value_.dVal;

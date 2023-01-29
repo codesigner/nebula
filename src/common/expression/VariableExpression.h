@@ -39,7 +39,7 @@ class VariableExpression final : public Expression {
     return var() == static_cast<const VariableExpression&>(rhs).var();
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 
@@ -91,7 +91,7 @@ class VersionedVariableExpression final : public Expression {
     return *version_ == *vve.version_;
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 

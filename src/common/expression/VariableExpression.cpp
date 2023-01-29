@@ -43,22 +43,22 @@ const Value& VersionedVariableExpression::eval(ExpressionContext& ctx) {
   }
 }
 
-std::string VariableExpression::toString() const {
+nebula::String VariableExpression::toString() const {
   if (var_.empty()) {
     return "";
   }
 
-  std::stringstream out;
+  nebula::stringstream out;
   out << "$" << var_;
   return out.str();
 }
 
-std::string VersionedVariableExpression::toString() const {
+nebula::String VersionedVariableExpression::toString() const {
   if (var_.empty()) {
     return "";
   }
 
-  std::stringstream out;
+  nebula::stringstream out;
   out << "$" << var_;
   if (version_ != nullptr) {
     out << "{" << (version_ ? version_->toString() : "") << "}";

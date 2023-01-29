@@ -352,7 +352,7 @@ class MatchPath final {
     isAntiPred_ = true;
   }
 
-  std::string toString() const;
+  nebula::String toString() const;
 
   MatchPath clone() const {
     auto path = MatchPath(new MatchNode(nodes_[0]->clone()));

@@ -30,14 +30,14 @@ Value GflagsManager::gflagsValueToValue(const std::string& type, const std::stri
     VLOG(1) << "Nested value: " << value;
     // transform to map value
     conf::Configuration conf;
-    auto status = conf.parseFromString(value.getStr());
+    auto status = conf.parseFromString(value.getStdStr());
     if (!status.ok()) {
       LOG(ERROR) << "Parse value: " << value << " failed: " << status;
       return Value::kNullValue;
     }
     Map map;
     conf.forEachItem([&map](const std::string& key, const folly::dynamic& val) {
-      map.kvs.emplace(key, val.asString());
+      map.kvs.emplace(nebula::String(key), nebula::String(val.asString()));
     });
     value.setMap(std::move(map));
     return value;
@@ -188,7 +188,7 @@ std::string GflagsManager::ValueToGflagString(const Value& val) {
       return folly::to<std::string>(val.getFloat());
     }
     case Value::Type::STRING: {
-      return val.getStr();
+      return val.getStdStr();
     }
     case Value::Type::MAP: {
       auto& kvs = val.getMap().kvs;

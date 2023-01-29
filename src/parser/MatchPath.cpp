@@ -87,8 +87,8 @@ std::string MatchNode::toString() const {
   return buf;
 }
 
-std::string MatchPath::toString() const {
-  std::string buf;
+nebula::String MatchPath::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   if (alias_ != nullptr) {

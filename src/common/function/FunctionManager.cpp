@@ -2374,7 +2374,7 @@ FunctionManager::FunctionManager() {
     attr.maxArity_ = INT64_MAX;
     attr.isAlwaysPure_ = true;
     attr.body_ = [](const auto &args) -> Value {
-      std::stringstream os;
+      nebula::Ostringstream os;
       for (size_t i = 0; i < args.size(); ++i) {
         switch (args[i].get().type()) {
           case Value::Type::NULLVALUE: {
@@ -2450,7 +2450,7 @@ FunctionManager::FunctionManager() {
           }
         }
       }
-      return folly::join(args[0].get().getStr(), result);
+      return nebula::String(folly::join(args[0].get().getStr(), result));
     };
   }
   // geo constructors
@@ -2479,7 +2479,7 @@ FunctionManager::FunctionManager() {
       if (!args[0].get().isStr()) {
         return Value::kNullBadType;
       }
-      const std::string &wkt = args[0].get().getStr();
+      const nebula::String &wkt = args[0].get().getStr();
       // Parse a geography from the wkt, normalize it and then verify its validity.
       auto geogRet = Geography::fromWKT(wkt, true, true);
       if (!geogRet.ok()) {
@@ -2784,7 +2784,7 @@ FunctionManager::FunctionManager() {
       std::regex rgx(args[1].get().getStr());
       List res;
       for (std::sregex_iterator beg(s.begin(), s.end(), rgx), end{}; beg != end; ++beg) {
-        res.emplace_back(beg->str());
+        res.emplace_back(nebula::String(beg->str()));
       }
       return res;
     };

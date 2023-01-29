@@ -30,9 +30,9 @@ class ListComprehensionExpression final : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
-  std::string rawString() const override {
+  nebula::String rawString() const override {
     return hasOriginString() ? originString_ : toString();
   }
 
@@ -92,7 +92,7 @@ class ListComprehensionExpression final : public Expression {
     return mapping_ != nullptr;
   }
 
-  void setOriginString(const std::string& s) {
+  void setOriginString(const nebula::String& s) {
     originString_ = s;
   }
 
@@ -122,7 +122,7 @@ class ListComprehensionExpression final : public Expression {
   Expression* collection_{nullptr};
   Expression* filter_{nullptr};   // filter_ is optional
   Expression* mapping_{nullptr};  // mapping_ is optional
-  std::string originString_;
+  nebula::String originString_;
   Value result_;
 };
 

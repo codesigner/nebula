@@ -31,7 +31,7 @@ class ColumnExpression final : public Expression {
     return ColumnExpression::make(pool_, index_);
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   bool operator==(const Expression& expr) const override;
 

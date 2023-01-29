@@ -138,8 +138,8 @@ void ListComprehensionExpression::resetFrom(Decoder& decoder) {
   }
 }
 
-std::string ListComprehensionExpression::toString() const {
-  std::string buf;
+nebula::String ListComprehensionExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += "[";

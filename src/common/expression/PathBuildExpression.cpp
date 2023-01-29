@@ -80,7 +80,7 @@ bool PathBuildExpression::buildPath(const Value& value, Path& path) const {
         }
       }
       if (!result) {
-        for (std::vector<Value>::const_reverse_iterator it = value.getList().values.rbegin();
+        for (ValueVector ::const_reverse_iterator it = value.getList().values.rbegin();
              it != value.getList().values.rend();
              ++it) {
           if (!buildPath(*it, path)) {
@@ -156,8 +156,8 @@ bool PathBuildExpression::operator==(const Expression& rhs) const {
   return true;
 }
 
-std::string PathBuildExpression::toString() const {
-  std::string buf;
+nebula::String PathBuildExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += "PathBuild[";

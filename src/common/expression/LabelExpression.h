@@ -17,7 +17,7 @@ class LabelExpression : public Expression {
   LabelExpression& operator=(const LabelExpression& rhs) = delete;
   LabelExpression& operator=(LabelExpression&&) = delete;
 
-  static LabelExpression* make(ObjectPool* pool, const std::string& name = "") {
+  static LabelExpression* make(ObjectPool* pool, const nebula::String& name = "") {
     return pool->makeAndAdd<LabelExpression>(pool, name);
   }
 
@@ -25,11 +25,11 @@ class LabelExpression : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  const std::string& name() const {
+  const nebula::String& name() const {
     return name_;
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 
@@ -39,14 +39,14 @@ class LabelExpression : public Expression {
 
  protected:
   friend ObjectPool;
-  explicit LabelExpression(ObjectPool* pool, const std::string& name = "")
+  explicit LabelExpression(ObjectPool* pool, const nebula::String& name = "")
       : Expression(pool, Kind::kLabel), name_(name) {}
 
   void writeTo(Encoder& encoder) const override;
   void resetFrom(Decoder& decoder) override;
 
  protected:
-  std::string name_;
+  nebula::String name_;
   Value result_;
 };
 

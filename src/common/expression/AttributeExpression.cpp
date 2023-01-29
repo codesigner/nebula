@@ -87,10 +87,10 @@ void AttributeExpression::accept(ExprVisitor *visitor) {
   visitor->visit(this);
 }
 
-std::string AttributeExpression::toString() const {
+nebula::String AttributeExpression::toString() const {
   auto lhs = left();
   auto rhs = right();
-  std::string buf;
+  nebula::String buf;
   buf.reserve(256);
   buf += lhs ? lhs->toString() : "";
   buf += '.';

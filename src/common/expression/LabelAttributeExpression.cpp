@@ -9,11 +9,11 @@
 
 namespace nebula {
 
-std::string LabelAttributeExpression::toString() const {
+nebula::String LabelAttributeExpression::toString() const {
   auto lhs = left();
   auto rhs = right();
   auto label = lhs ? (lhs->toString()) : "";
-  std::string attr;
+  nebula::String attr;
   if (rhs != nullptr) {
     DCHECK_EQ(rhs->kind(), Kind::kConstant);
     auto *constant = static_cast<const ConstantExpression *>(rhs);
@@ -23,7 +23,7 @@ std::string LabelAttributeExpression::toString() const {
       attr = rhs->toString();
     }
   }
-  return label + "." + attr;
+  return label + nebula::String(".") + attr;
 }
 
 void LabelAttributeExpression::accept(ExprVisitor *visitor) {

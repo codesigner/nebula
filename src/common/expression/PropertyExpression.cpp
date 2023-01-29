@@ -151,8 +151,8 @@ void EdgeDstIdExpression::accept(ExprVisitor* visitor) {
   visitor->visit(this);
 }
 
-std::string PropertyExpression::toString() const {
-  std::string buf;
+nebula::String PropertyExpression::toString() const {
+  nebula::String buf;
   buf.reserve(64);
 
   if (!ref_.empty()) {
@@ -171,8 +171,8 @@ std::string PropertyExpression::toString() const {
   return buf;
 }
 
-std::string VariablePropertyExpression::toString() const {
-  std::string buf;
+nebula::String VariablePropertyExpression::toString() const {
+  nebula::String buf;
   buf.reserve(64);
 
   if (!ref_.empty()) {
@@ -209,8 +209,8 @@ void LabelTagPropertyExpression::accept(ExprVisitor* visitor) {
   visitor->visit(this);
 }
 
-std::string LabelTagPropertyExpression::toString() const {
-  std::string labelStr;
+nebula::String LabelTagPropertyExpression::toString() const {
+  nebula::String labelStr;
   if (label_ != nullptr) {
     labelStr = label_->toString();
     // Remove the leading '$' character for variable except '$-/$$/$^'

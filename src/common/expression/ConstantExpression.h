@@ -39,7 +39,7 @@ class ConstantExpression : public Expression {
 
   void accept(ExprVisitor* visitor) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   Expression* clone() const override {
     return ConstantExpression::make(pool_, val_);

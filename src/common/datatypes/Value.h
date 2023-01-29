@@ -298,6 +298,7 @@ struct Value {
   }
   const double& getFloat() const;
   const String& getStr() const;
+  const std::string getStdStr() const;
   const Date& getDate() const;
   const Time& getTime() const;
   const DateTime& getDateTime() const;

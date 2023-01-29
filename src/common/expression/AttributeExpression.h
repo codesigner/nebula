@@ -26,7 +26,7 @@ class AttributeExpression final : public BinaryExpression {
 
   void accept(ExprVisitor *visitor) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   Expression *clone() const override {
     return AttributeExpression::make(pool_, left()->clone(), right()->clone());

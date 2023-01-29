@@ -36,8 +36,8 @@ const Value& ArithmeticExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string ArithmeticExpression::toString() const {
-  std::string op;
+nebula::String ArithmeticExpression::toString() const {
+  nebula::String op;
   switch (kind_) {
     case Kind::kAdd:
       op = "+";
@@ -58,7 +58,7 @@ std::string ArithmeticExpression::toString() const {
       DLOG(FATAL) << "Illegal kind for arithmetic expression: " << static_cast<int>(kind());
       op = " Invalid arithmetic expression ";
   }
-  std::stringstream out;
+  nebula::stringstream out;
   out << "(" << (lhs_ ? lhs_->toString() : "") << op << (rhs_ ? rhs_->toString() : "") << ")";
   return out.str();
 }

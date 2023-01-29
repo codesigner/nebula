@@ -488,7 +488,7 @@ folly::Future<StatusOr<cpp2::GetUUIDResp>> StorageClient::getUUID(GraphSpaceID s
     return Status::Error("Space not found, spaceid: %d", space);
   }
   auto numParts = status.value();
-  status = metaClient_->partId(numParts, name);
+  status = metaClient_->partId(numParts, VertexID(name));
   if (!status.ok()) {
     return folly::makeFuture<StatusOr<cpp2::GetUUIDResp>>(status.status());
   }
@@ -651,8 +651,10 @@ StorageRpcRespFuture<cpp2::ScanResponse> StorageClient::scanVertex(
 
 folly::SemiFuture<StorageRpcResponse<cpp2::KVGetResponse>> StorageClient::get(
     GraphSpaceID space, std::vector<std::string>&& keys, bool returnPartly, folly::EventBase* evb) {
-  auto status = clusterIdsToHosts(
-      space, std::move(keys), [](const nebula::String& v) -> const nebula::String& { return v; });
+  auto status =
+      clusterIdsToHosts(space, std::move(keys), [](const std::string& v) -> const nebula::String {
+        return nebula::String(v);
+      });
 
   if (!status.ok()) {
     return folly::makeFuture<StorageRpcResponse<cpp2::KVGetResponse>>(
@@ -702,8 +704,10 @@ folly::SemiFuture<StorageRpcResponse<cpp2::ExecResponse>> StorageClient::put(
 
 folly::SemiFuture<StorageRpcResponse<cpp2::ExecResponse>> StorageClient::remove(
     GraphSpaceID space, std::vector<std::string> keys, folly::EventBase* evb) {
-  auto status = clusterIdsToHosts(
-      space, std::move(keys), [](const std::string& v) -> const std::string& { return v; });
+  auto status =
+      clusterIdsToHosts(space, std::move(keys), [](const std::string& v) -> const nebula::String {
+        return nebula::String(v);
+      });
 
   if (!status.ok()) {
     return folly::makeFuture<StorageRpcResponse<cpp2::ExecResponse>>(
@@ -908,7 +912,7 @@ StatusOr<std::function<const VertexID&(const cpp2::DelTags&)>> StorageClient::ge
       const auto& vId = delTags.get_id();
       DCHECK_EQ(Value::Type::INT, vId.type());
       auto& mutableV = const_cast<Value&>(vId);
-      mutableV = Value(std::string(reinterpret_cast<const char*>(&vId.getInt()), 8));
+      mutableV = Value(nebula::String(reinterpret_cast<const char*>(&vId.getInt()), 8));
       return mutableV.getStr();
     };
   } else if (vidType == PropertyType::FIXED_STRING) {

@@ -52,7 +52,7 @@ class ArithmeticExpression final : public BinaryExpression {
 
   void accept(ExprVisitor* visitor) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   Expression* clone() const override {
     return pool_->makeAndAdd<ArithmeticExpression>(

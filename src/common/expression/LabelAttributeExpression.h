@@ -62,7 +62,7 @@ class LabelAttributeExpression final : public Expression {
     return rhs_;
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
  private:
   friend ObjectPool;

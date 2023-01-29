@@ -33,7 +33,7 @@ class AggregateExpression final : public Expression {
 
   bool operator==(const Expression& rhs) const override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 

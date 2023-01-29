@@ -22,8 +22,8 @@ bool ColumnExpression::operator==(const Expression &expr) const {
   return index_ == r.index_;
 }
 
-std::string ColumnExpression::toString() const {
-  std::stringstream out;
+nebula::String ColumnExpression::toString() const {
+  nebula::stringstream out;
   out << "COLUMN[" << index_ << "]";
   return out.str();
 }

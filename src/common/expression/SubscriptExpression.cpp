@@ -102,8 +102,8 @@ const Value& SubscriptExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string SubscriptExpression::toString() const {
-  std::string buf;
+nebula::String SubscriptExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
   auto lhs = left();
   auto rhs = right();
@@ -187,8 +187,8 @@ const Value& SubscriptRangeExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string SubscriptRangeExpression::toString() const {
-  std::string buf;
+nebula::String SubscriptRangeExpression::toString() const {
+  nebula::String buf;
   buf.reserve(32);
   buf += list_ ? list_->toString() : "";
   buf += '[';

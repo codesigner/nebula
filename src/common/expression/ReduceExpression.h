@@ -28,9 +28,9 @@ class ReduceExpression final : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
-  std::string rawString() const override {
+  nebula::String rawString() const override {
     return hasOriginString() ? originString_ : toString();
   }
 
@@ -90,7 +90,7 @@ class ReduceExpression final : public Expression {
     mapping_ = expr;
   }
 
-  void setOriginString(const std::string& s) {
+  void setOriginString(const nebula::String& s) {
     originString_ = s;
   }
 
@@ -122,7 +122,7 @@ class ReduceExpression final : public Expression {
   std::string innerVar_;
   Expression* collection_;
   Expression* mapping_;
-  std::string originString_;
+  nebula::String originString_;
   Value result_;
 };
 

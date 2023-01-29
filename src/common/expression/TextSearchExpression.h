@@ -122,7 +122,7 @@ class TextSearchExpression : public Expression {
     DLOG(FATAL) << "TextSearchExpression has to be rewritten";
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   Expression* clone() const override {
     auto arg = TextSearchArgument::make(pool_, arg_->from(), arg_->prop(), arg_->val());

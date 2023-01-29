@@ -40,34 +40,34 @@ class ExpressionContext {
   virtual const Value& getVersionedVar(const std::string& var, int64_t version) const = 0;
 
   // Get the specified property from a variable, such as $a.prop_name
-  virtual const Value& getVarProp(const std::string& var, const std::string& prop) const = 0;
+  virtual const Value& getVarProp(const nebula::String& var, const nebula::String& prop) const = 0;
 
   // Get index of variable property in tuple
-  virtual StatusOr<std::size_t> getVarPropIndex(const std::string& var,
-                                                const std::string& prop) const = 0;
+  virtual StatusOr<std::size_t> getVarPropIndex(const nebula::String& var,
+                                                const nebula::String& prop) const = 0;
 
   // Get the specified property from the edge, such as edge_type.prop_name
-  virtual Value getEdgeProp(const std::string& edgeType, const std::string& prop) const = 0;
+  virtual Value getEdgeProp(const nebula::String& edgeType, const nebula::String& prop) const = 0;
 
   // Get the specified property from the tag, such as tag.prop_name
-  virtual Value getTagProp(const std::string& tag, const std::string& prop) const = 0;
+  virtual Value getTagProp(const nebula::String& tag, const nebula::String& prop) const = 0;
 
   // Get the specified property from the source vertex, such as
   // $^.tag_name.prop_name
-  virtual Value getSrcProp(const std::string& tag, const std::string& prop) const = 0;
+  virtual Value getSrcProp(const nebula::String& tag, const nebula::String& prop) const = 0;
 
   // Get the specified property from the destination vertex, such as
   // $$.tag_name.prop_name
-  virtual const Value& getDstProp(const std::string& tag, const std::string& prop) const = 0;
+  virtual const Value& getDstProp(const nebula::String& tag, const nebula::String& prop) const = 0;
 
   // Get the specified property from the input, such as $-.prop_name
-  virtual const Value& getInputProp(const std::string& prop) const = 0;
+  virtual const Value& getInputProp(const nebula::String& prop) const = 0;
 
   // Get index of input property in tuple
-  virtual StatusOr<std::size_t> getInputPropIndex(const std::string& prop) const = 0;
+  virtual StatusOr<std::size_t> getInputPropIndex(const nebula::String& prop) const = 0;
 
   // Get Vertex
-  virtual Value getVertex(const std::string& name = "") const = 0;
+  virtual Value getVertex(const nebula::String& name = "") const = 0;
 
   // Get Edge
   virtual Value getEdge() const = 0;

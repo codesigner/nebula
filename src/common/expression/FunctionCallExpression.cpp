@@ -78,15 +78,15 @@ const Value& FunctionCallExpression::eval(ExpressionContext& ctx) {
   return result_;
 }
 
-std::string FunctionCallExpression::toString() const {
-  std::stringstream out;
+nebula::String FunctionCallExpression::toString() const {
+  nebula::stringstream out;
 
   if (args_ != nullptr) {
     std::vector<std::string> args(args_->numArgs());
     std::transform(args_->args().begin(),
                    args_->args().end(),
                    args.begin(),
-                   [](const auto& arg) -> std::string { return arg ? arg->toString() : ""; });
+                   [](const auto& arg) -> nebula::String { return arg ? arg->toString() : ""; });
     out << name_ << "(" << folly::join(",", args) << ")";
 
   } else {

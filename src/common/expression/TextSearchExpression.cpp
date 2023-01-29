@@ -45,8 +45,8 @@ bool TextSearchExpression::operator==(const Expression& rhs) const {
   return arg_ == r.arg_;
 }
 
-std::string TextSearchExpression::toString() const {
-  std::string buf;
+nebula::String TextSearchExpression::toString() const {
+  nebula::String buf;
   buf.reserve(64);
   switch (kind_) {
     case Kind::kTSWildcard: {

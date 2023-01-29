@@ -111,7 +111,7 @@ class CaseExpression final : public Expression {
     return cases_;
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 

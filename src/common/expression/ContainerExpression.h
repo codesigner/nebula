@@ -110,7 +110,7 @@ class ListExpression final : public ContainerExpression {
 
   bool operator==(const Expression &rhs) const override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor *visitor) override;
 
@@ -178,7 +178,7 @@ class SetExpression final : public ContainerExpression {
 
   bool operator==(const Expression &rhs) const override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor *visitor) override;
 
@@ -256,7 +256,7 @@ class MapExpression final : public ContainerExpression {
 
   bool operator==(const Expression &rhs) const override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor *visitor) override;
 

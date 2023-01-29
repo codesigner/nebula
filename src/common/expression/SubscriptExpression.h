@@ -22,7 +22,7 @@ class SubscriptExpression final : public BinaryExpression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 
@@ -53,7 +53,7 @@ class SubscriptRangeExpression final : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 

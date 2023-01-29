@@ -45,7 +45,7 @@ class LogicalExpression final : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 

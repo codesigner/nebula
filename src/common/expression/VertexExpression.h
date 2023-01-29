@@ -20,7 +20,7 @@ class VertexExpression final : public Expression {
  public:
   // default name : VERTEX, $^ : startNode of EDGE, $$ : endNode of EDGE
   // $$ & $^ only used in go sentence
-  static VertexExpression *make(ObjectPool *pool, const std::string &name = "VERTEX") {
+  static VertexExpression *make(ObjectPool *pool, const nebula::String &name = "VERTEX") {
     return pool->makeAndAdd<VertexExpression>(pool, name);
   }
 
@@ -32,11 +32,11 @@ class VertexExpression final : public Expression {
     return VertexExpression::make(pool_, name());
   }
 
-  std::string toString() const override {
+  nebula::String toString() const override {
     return name_;
   }
 
-  const std::string &name() const {
+  const nebula::String &name() const {
     return name_;
   }
 
@@ -44,7 +44,7 @@ class VertexExpression final : public Expression {
 
  private:
   friend ObjectPool;
-  VertexExpression(ObjectPool *pool, const std::string &name)
+  VertexExpression(ObjectPool *pool, const nebula::String &name)
       : Expression(pool, Kind::kVertex), name_(name) {}
 
   void writeTo(Encoder &encoder) const override;
@@ -52,7 +52,7 @@ class VertexExpression final : public Expression {
   void resetFrom(Decoder &) override;
 
  private:
-  std::string name_;
+  nebula::String name_;
   Value result_;
 };
 

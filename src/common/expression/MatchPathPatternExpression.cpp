@@ -30,7 +30,7 @@ bool MatchPathPatternExpression::operator==(const Expression& rhs) const {
   return true;
 }
 
-std::string MatchPathPatternExpression::toString() const {
+nebula::String MatchPathPatternExpression::toString() const {
   return matchPath_->toString();
 }
 

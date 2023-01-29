@@ -34,34 +34,34 @@ class PropertyExpression : public Expression {
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  const std::string& ref() const {
+  const nebula::String& ref() const {
     return ref_;
   }
 
-  const std::string& sym() const {
+  const nebula::String& sym() const {
     return sym_;
   }
 
-  const std::string& prop() const {
+  const nebula::String& prop() const {
     return prop_;
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
  protected:
   PropertyExpression(ObjectPool* pool,
                      Kind kind,
-                     const std::string& ref,
-                     const std::string& sym,
-                     const std::string& prop)
+                     const nebula::String& ref,
+                     const nebula::String& sym,
+                     const nebula::String& prop)
       : Expression(pool, kind), ref_(ref), sym_(sym), prop_(prop) {}
 
   void writeTo(Encoder& encoder) const override;
   void resetFrom(Decoder& decoder) override;
 
-  std::string ref_;
-  std::string sym_;
-  std::string prop_;
+  nebula::String ref_;
+  nebula::String sym_;
+  nebula::String prop_;
 };
 
 // edge_name.any_prop_name
@@ -71,8 +71,8 @@ class EdgePropertyExpression final : public PropertyExpression {
   EdgePropertyExpression& operator=(EdgePropertyExpression&&) = delete;
 
   static EdgePropertyExpression* make(ObjectPool* pool,
-                                      const std::string& edge = "",
-                                      const std::string& prop = "") {
+                                      const nebula::String& edge = "",
+                                      const nebula::String& prop = "") {
     return pool->makeAndAdd<EdgePropertyExpression>(pool, edge, prop);
   }
 
@@ -87,8 +87,8 @@ class EdgePropertyExpression final : public PropertyExpression {
  private:
   friend ObjectPool;
   explicit EdgePropertyExpression(ObjectPool* pool,
-                                  const std::string& edge = "",
-                                  const std::string& prop = "")
+                                  const nebula::String& edge = "",
+                                  const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kEdgeProperty, "", edge, prop) {}
 
  private:
@@ -102,8 +102,8 @@ class TagPropertyExpression final : public PropertyExpression {
   TagPropertyExpression& operator=(TagPropertyExpression&&) = delete;
 
   static TagPropertyExpression* make(ObjectPool* pool,
-                                     const std::string& tag = "",
-                                     const std::string& prop = "") {
+                                     const nebula::String& tag = "",
+                                     const nebula::String& prop = "") {
     return pool->makeAndAdd<TagPropertyExpression>(pool, tag, prop);
   }
 
@@ -118,8 +118,8 @@ class TagPropertyExpression final : public PropertyExpression {
  private:
   friend ObjectPool;
   explicit TagPropertyExpression(ObjectPool* pool,
-                                 const std::string& tag = "",
-                                 const std::string& prop = "")
+                                 const nebula::String& tag = "",
+                                 const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kTagProperty, "", tag, prop) {}
 
  private:
@@ -134,12 +134,12 @@ class LabelTagPropertyExpression final : public PropertyExpression {
 
   static LabelTagPropertyExpression* make(ObjectPool* pool,
                                           Expression* label = nullptr,
-                                          const std::string& tag = "",
-                                          const std::string& prop = "") {
+                                          const nebula::String& tag = "",
+                                          const nebula::String& prop = "") {
     return pool->makeAndAdd<LabelTagPropertyExpression>(pool, label, tag, prop);
   }
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   bool operator==(const Expression& rhs) const override;
 
@@ -167,8 +167,8 @@ class LabelTagPropertyExpression final : public PropertyExpression {
   friend ObjectPool;
   explicit LabelTagPropertyExpression(ObjectPool* pool,
                                       Expression* label = nullptr,
-                                      const std::string& tag = "",
-                                      const std::string& prop = "")
+                                      const nebula::String& tag = "",
+                                      const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kLabelTagProperty, "", tag, prop), label_(label) {}
 
   void writeTo(Encoder& encoder) const override;
@@ -184,7 +184,7 @@ class InputPropertyExpression final : public PropertyExpression {
   InputPropertyExpression& operator=(const InputPropertyExpression& rhs) = delete;
   InputPropertyExpression& operator=(InputPropertyExpression&&) = delete;
 
-  static InputPropertyExpression* make(ObjectPool* pool, const std::string& prop = "") {
+  static InputPropertyExpression* make(ObjectPool* pool, const nebula::String& prop = "") {
     return pool->makeAndAdd<InputPropertyExpression>(pool, prop);
   }
 
@@ -198,7 +198,7 @@ class InputPropertyExpression final : public PropertyExpression {
 
  private:
   friend ObjectPool;
-  explicit InputPropertyExpression(ObjectPool* pool, const std::string& prop = "")
+  explicit InputPropertyExpression(ObjectPool* pool, const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kInputProperty, kInputRef, "", prop) {}
 
   // runtime info
@@ -212,14 +212,14 @@ class VariablePropertyExpression final : public PropertyExpression {
   VariablePropertyExpression& operator=(VariablePropertyExpression&&) = delete;
 
   static VariablePropertyExpression* make(ObjectPool* pool,
-                                          const std::string& var = "",
-                                          const std::string& prop = "") {
+                                          const nebula::String& var = "",
+                                          const nebula::String& prop = "") {
     return pool->makeAndAdd<VariablePropertyExpression>(pool, var, prop);
   }
 
   const Value& eval(ExpressionContext& ctx) override;
 
-  std::string toString() const override;
+  nebula::String toString() const override;
 
   void accept(ExprVisitor* visitor) override;
 
@@ -230,8 +230,8 @@ class VariablePropertyExpression final : public PropertyExpression {
  private:
   friend ObjectPool;
   explicit VariablePropertyExpression(ObjectPool* pool,
-                                      const std::string& var = "",
-                                      const std::string& prop = "")
+                                      const nebula::String& var = "",
+                                      const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kVarProperty, kVarRef, var, prop) {}
 
   // runtime info
@@ -245,8 +245,8 @@ class SourcePropertyExpression final : public PropertyExpression {
   SourcePropertyExpression& operator=(SourcePropertyExpression&&) = delete;
 
   static SourcePropertyExpression* make(ObjectPool* pool,
-                                        const std::string& tag = "",
-                                        const std::string& prop = "") {
+                                        const nebula::String& tag = "",
+                                        const nebula::String& prop = "") {
     return pool->makeAndAdd<SourcePropertyExpression>(pool, tag, prop);
   }
 
@@ -261,8 +261,8 @@ class SourcePropertyExpression final : public PropertyExpression {
  private:
   friend ObjectPool;
   explicit SourcePropertyExpression(ObjectPool* pool,
-                                    const std::string& tag = "",
-                                    const std::string& prop = "")
+                                    const nebula::String& tag = "",
+                                    const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kSrcProperty, kSrcRef, tag, prop) {}
 
  private:
@@ -276,8 +276,8 @@ class DestPropertyExpression final : public PropertyExpression {
   DestPropertyExpression& operator=(DestPropertyExpression&&) = delete;
 
   static DestPropertyExpression* make(ObjectPool* pool,
-                                      const std::string& tag = "",
-                                      const std::string& prop = "") {
+                                      const nebula::String& tag = "",
+                                      const nebula::String& prop = "") {
     return pool->makeAndAdd<DestPropertyExpression>(pool, tag, prop);
   }
 
@@ -292,8 +292,8 @@ class DestPropertyExpression final : public PropertyExpression {
  private:
   friend ObjectPool;
   explicit DestPropertyExpression(ObjectPool* pool,
-                                  const std::string& tag = "",
-                                  const std::string& prop = "")
+                                  const nebula::String& tag = "",
+                                  const nebula::String& prop = "")
       : PropertyExpression(pool, Kind::kDstProperty, kDstRef, tag, prop) {}
 };
 
@@ -303,7 +303,7 @@ class EdgeSrcIdExpression final : public PropertyExpression {
   EdgeSrcIdExpression& operator=(const EdgeSrcIdExpression& rhs) = delete;
   EdgeSrcIdExpression& operator=(EdgeSrcIdExpression&&) = delete;
 
-  static EdgeSrcIdExpression* make(ObjectPool* pool, const std::string& edge = "") {
+  static EdgeSrcIdExpression* make(ObjectPool* pool, const nebula::String& edge = "") {
     return pool->makeAndAdd<EdgeSrcIdExpression>(pool, edge);
   }
 
@@ -317,7 +317,7 @@ class EdgeSrcIdExpression final : public PropertyExpression {
 
  private:
   friend ObjectPool;
-  explicit EdgeSrcIdExpression(ObjectPool* pool, const std::string& edge = "")
+  explicit EdgeSrcIdExpression(ObjectPool* pool, const nebula::String& edge = "")
       : PropertyExpression(pool, Kind::kEdgeSrc, "", edge, kSrc) {}
 
  private:
@@ -330,7 +330,7 @@ class EdgeTypeExpression final : public PropertyExpression {
   EdgeTypeExpression& operator=(const EdgeTypeExpression& rhs) = delete;
   EdgeTypeExpression& operator=(EdgeTypeExpression&&) = delete;
 
-  static EdgeTypeExpression* make(ObjectPool* pool, const std::string& edge = "") {
+  static EdgeTypeExpression* make(ObjectPool* pool, const nebula::String& edge = "") {
     return pool->makeAndAdd<EdgeTypeExpression>(pool, edge);
   }
 
@@ -344,7 +344,7 @@ class EdgeTypeExpression final : public PropertyExpression {
 
  private:
   friend ObjectPool;
-  explicit EdgeTypeExpression(ObjectPool* pool, const std::string& edge = "")
+  explicit EdgeTypeExpression(ObjectPool* pool, const nebula::String& edge = "")
       : PropertyExpression(pool, Kind::kEdgeType, "", edge, kType) {}
 
  private:
@@ -357,7 +357,7 @@ class EdgeRankExpression final : public PropertyExpression {
   EdgeRankExpression& operator=(const EdgeRankExpression& rhs) = delete;
   EdgeRankExpression& operator=(EdgeRankExpression&&) = delete;
 
-  static EdgeRankExpression* make(ObjectPool* pool, const std::string& edge = "") {
+  static EdgeRankExpression* make(ObjectPool* pool, const nebula::String& edge = "") {
     return pool->makeAndAdd<EdgeRankExpression>(pool, edge);
   }
 
@@ -371,7 +371,7 @@ class EdgeRankExpression final : public PropertyExpression {
 
  private:
   friend ObjectPool;
-  explicit EdgeRankExpression(ObjectPool* pool, const std::string& edge = "")
+  explicit EdgeRankExpression(ObjectPool* pool, const nebula::String& edge = "")
       : PropertyExpression(pool, Kind::kEdgeRank, "", edge, kRank) {}
 
  private:
@@ -384,7 +384,7 @@ class EdgeDstIdExpression final : public PropertyExpression {
   EdgeDstIdExpression& operator=(const EdgeDstIdExpression& rhs) = delete;
   EdgeDstIdExpression& operator=(EdgeDstIdExpression&&) = delete;
 
-  static EdgeDstIdExpression* make(ObjectPool* pool, const std::string& edge = "") {
+  static EdgeDstIdExpression* make(ObjectPool* pool, const nebula::String& edge = "") {
     return pool->makeAndAdd<EdgeDstIdExpression>(pool, edge);
   }
 
@@ -398,7 +398,7 @@ class EdgeDstIdExpression final : public PropertyExpression {
 
  private:
   friend ObjectPool;
-  explicit EdgeDstIdExpression(ObjectPool* pool, const std::string& edge = "")
+  explicit EdgeDstIdExpression(ObjectPool* pool, const nebula::String& edge = "")
       : PropertyExpression(pool, Kind::kEdgeDst, "", edge, kDst) {}
 
  private:

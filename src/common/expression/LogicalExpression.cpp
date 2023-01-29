@@ -103,8 +103,8 @@ const Value &LogicalExpression::evalXor(ExpressionContext &ctx) {
   return result_;
 }
 
-std::string LogicalExpression::toString() const {
-  std::string op;
+nebula::String LogicalExpression::toString() const {
+  nebula::String op;
   switch (kind()) {
     case Kind::kLogicalAnd:
       op = " AND ";
@@ -119,7 +119,7 @@ std::string LogicalExpression::toString() const {
       DLOG(FATAL) << "Illegal kind for logical expression: " << static_cast<int>(kind());
       op = " Invalid logical expression ";
   }
-  std::string buf;
+  nebula::String buf;
   buf.reserve(256);
 
   buf += "(";

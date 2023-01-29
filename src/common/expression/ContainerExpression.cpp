@@ -13,8 +13,8 @@
 namespace nebula {
 
 // TODO(jie): toString of list should add `LIST` prefix
-std::string ListExpression::toString() const {
-  std::string buf;
+nebula::String ListExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += '[';
@@ -52,7 +52,7 @@ bool ListExpression::operator==(const Expression &rhs) const {
 
 const Value &ListExpression::eval(ExpressionContext &ctx) {
   // TODO(dutor) Reuse `result_' iff all elements are constant
-  std::vector<Value> items;
+  ValueVector items;
   items.reserve(size());
 
   for (auto &expr : items_) {
@@ -84,8 +84,8 @@ void ListExpression::accept(ExprVisitor *visitor) {
 }
 
 // TODO(jie): toString of set should add `SET` prefix
-std::string SetExpression::toString() const {
-  std::string buf;
+nebula::String SetExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += '{';
@@ -155,8 +155,8 @@ void SetExpression::accept(ExprVisitor *visitor) {
 }
 
 // TODO(jie): toString of map should add `MAP` prefix
-std::string MapExpression::toString() const {
-  std::string buf;
+nebula::String MapExpression::toString() const {
+  nebula::String buf;
   buf.reserve(256);
 
   buf += '{';
@@ -199,7 +199,7 @@ bool MapExpression::operator==(const Expression &rhs) const {
 
 const Value &MapExpression::eval(ExpressionContext &ctx) {
   // TODO(dutor) Reuse `result_' iff all elements are constant
-  std::unordered_map<std::string, Value> map;
+  ValueMap map;
   map.reserve(size());
 
   for (auto &kv : items_) {

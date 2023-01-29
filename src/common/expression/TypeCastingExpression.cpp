@@ -124,8 +124,8 @@ void TypeCastingExpression::resetFrom(Decoder& decoder) {
   CHECK(!!operand_);
 }
 
-std::string TypeCastingExpression::toString() const {
-  std::stringstream out;
+nebula::String TypeCastingExpression::toString() const {
+  nebula::stringstream out;
   out << "(" << vType_ << ")" << (operand_ ? operand_->toString() : "");
   return out.str();
 }
